@@ -1,0 +1,2313 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>FrontRow Africa — Tickets. Tips. Culture.</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Syne:wght@400;600;700;800&family=Space+Mono:wght@400;700&family=DM+Sans:ital,opsz,wght@0,9..40,300;0,9..40,400;0,9..40,500;1,9..40,300&display=swap" rel="stylesheet">
+<style>
+/* ═══════════════════════════════════════════
+   DESIGN TOKENS — FrontRow Africa Brand System
+═══════════════════════════════════════════ */
+:root {
+  --inkblack: #0A0A08;
+  --bone: #F2EDE4;
+  --kente-gold: #E8A020;
+  --adire-indigo: #1A2C5B;
+  --terracotta: #C4522A;
+  --palm-green: #2D5016;
+  --ash: #9B9589;
+  --pale-bone: #FAF7F2;
+  --kente-amber: #F0C040;
+  --sunset-red: #D43F1A;
+  --ocean-teal: #1B7A6E;
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+  --font-body: 'DM Sans', sans-serif;
+}
+
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; }
+body {
+  background: var(--inkblack);
+  color: var(--bone);
+  font-family: var(--font-body);
+  font-size: 16px;
+  line-height: 1.6;
+  overflow-x: hidden;
+}
+
+/* Noise texture overlay */
+body::before {
+  content: '';
+  position: fixed;
+  inset: 0;
+  background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='0.04'/%3E%3C/svg%3E");
+  pointer-events: none;
+  z-index: 9999;
+  opacity: 0.4;
+}
+
+/* ═══════════════════════════════════════════
+   VIEWS (SPA routing)
+═══════════════════════════════════════════ */
+.view { display: none; }
+.view.active { display: block; }
+
+/* ═══════════════════════════════════════════
+   NAV
+═══════════════════════════════════════════ */
+nav {
+  position: fixed;
+  top: 0; left: 0; right: 0;
+  z-index: 100;
+  background: rgba(10,10,8,0.92);
+  backdrop-filter: blur(16px);
+  border-bottom: 1px solid rgba(232,160,32,0.15);
+  padding: 0 40px;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  height: 64px;
+}
+
+.nav-logo {
+  display: flex;
+  flex-direction: column;
+  line-height: 0.85;
+  cursor: pointer;
+}
+.nav-logo-front { font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--bone); letter-spacing: -0.5px; }
+.nav-logo-row-wrap { display: flex; align-items: flex-end; gap: 3px; }
+.nav-logo-row { font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--kente-gold); letter-spacing: -0.5px; }
+.nav-logo-dot { width: 5px; height: 5px; background: var(--terracotta); border-radius: 50%; margin-bottom: 3px; flex-shrink: 0; }
+.nav-logo-sub { font-family: var(--font-mono); font-size: 7px; letter-spacing: 0.35em; text-transform: uppercase; color: var(--ash); margin-top: 2px; }
+
+.nav-links {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  list-style: none;
+}
+.nav-links a {
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ash);
+  text-decoration: none;
+  padding: 6px 14px;
+  border-radius: 2px;
+  transition: color 0.2s, background 0.2s;
+  cursor: pointer;
+}
+.nav-links a:hover, .nav-links a.active { color: var(--bone); background: rgba(232,160,32,0.1); }
+
+.nav-actions { display: flex; align-items: center; gap: 12px; }
+
+.btn {
+  display: inline-flex; align-items: center; gap: 8px;
+  font-family: var(--font-mono);
+  font-size: 11px;
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  cursor: pointer;
+  border: none;
+  border-radius: 2px;
+  transition: all 0.2s;
+  text-decoration: none;
+}
+.btn-ghost {
+  background: transparent;
+  color: var(--ash);
+  padding: 8px 16px;
+  border: 1px solid rgba(155,149,137,0.3);
+}
+.btn-ghost:hover { color: var(--bone); border-color: var(--bone); }
+.btn-primary {
+  background: var(--kente-gold);
+  color: var(--inkblack);
+  padding: 9px 20px;
+  font-weight: 700;
+}
+.btn-primary:hover { background: var(--kente-amber); }
+.btn-terracotta {
+  background: var(--terracotta);
+  color: var(--bone);
+  padding: 9px 20px;
+  font-weight: 700;
+}
+.btn-terracotta:hover { background: var(--sunset-red); }
+.btn-outline {
+  background: transparent;
+  color: var(--kente-gold);
+  border: 1px solid var(--kente-gold);
+  padding: 8px 18px;
+}
+.btn-outline:hover { background: var(--kente-gold); color: var(--inkblack); }
+.btn-teal {
+  background: var(--ocean-teal);
+  color: var(--bone);
+  padding: 9px 20px;
+  font-weight: 700;
+}
+.btn-teal:hover { background: #22968a; }
+
+/* ═══════════════════════════════════════════
+   HOME — HERO
+═══════════════════════════════════════════ */
+.hero {
+  min-height: 100vh;
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  position: relative;
+  overflow: hidden;
+  padding-top: 64px;
+}
+
+.hero-pattern {
+  position: absolute; inset: 0;
+  background-image:
+    repeating-linear-gradient(90deg, transparent, transparent 39px, rgba(232,160,32,0.07) 39px, rgba(232,160,32,0.07) 40px),
+    repeating-linear-gradient(0deg, transparent, transparent 39px, rgba(232,160,32,0.07) 39px, rgba(232,160,32,0.07) 40px),
+    repeating-linear-gradient(45deg, transparent, transparent 19px, rgba(196,82,42,0.03) 19px, rgba(196,82,42,0.03) 20px);
+  pointer-events: none;
+}
+
+.hero::after {
+  content: '';
+  position: absolute;
+  top: 0; right: 0;
+  width: 50%;
+  height: 100%;
+  background: var(--adire-indigo);
+  clip-path: polygon(15% 0%, 100% 0%, 100% 100%, 0% 100%);
+  z-index: 0;
+}
+
+.hero-left {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 60px;
+}
+.hero-right {
+  position: relative; z-index: 2;
+  display: flex; flex-direction: column; justify-content: center;
+  padding: 80px 60px;
+}
+
+.hero-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--kente-gold);
+  margin-bottom: 28px;
+  display: flex; align-items: center; gap: 12px;
+}
+.hero-eyebrow::before {
+  content: ''; display: block;
+  width: 32px; height: 1px;
+  background: var(--kente-gold);
+}
+
+.hero-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(56px, 5vw, 80px);
+  line-height: 0.9;
+  letter-spacing: -3px;
+  margin-bottom: 32px;
+}
+.hero-title .gold { color: var(--kente-gold); }
+.hero-title .line-block { display: block; }
+
+.hero-sub {
+  font-size: 18px;
+  font-weight: 300;
+  color: rgba(242,237,228,0.7);
+  line-height: 1.6;
+  max-width: 400px;
+  margin-bottom: 48px;
+  font-style: italic;
+}
+
+.hero-cta-row { display: flex; gap: 12px; flex-wrap: wrap; margin-bottom: 64px; }
+
+.hero-stats {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 0;
+  border-top: 1px solid rgba(242,237,228,0.1);
+  padding-top: 40px;
+}
+.stat-item {
+  padding: 0 24px 0 0;
+  border-right: 1px solid rgba(242,237,228,0.08);
+}
+.stat-item:first-child { padding-left: 0; }
+.stat-item:last-child { border-right: none; }
+.stat-num {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 36px;
+  color: var(--kente-gold);
+  letter-spacing: -1px;
+}
+.stat-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ash);
+  margin-top: 4px;
+}
+
+/* Featured event card on hero right */
+.featured-card {
+  background: rgba(10,10,8,0.7);
+  border: 1px solid rgba(232,160,32,0.2);
+  border-radius: 4px;
+  overflow: hidden;
+  backdrop-filter: blur(8px);
+}
+.fc-image {
+  width: 100%;
+  height: 220px;
+  background: linear-gradient(135deg, var(--terracotta) 0%, var(--adire-indigo) 60%, var(--inkblack) 100%);
+  position: relative;
+  display: flex; align-items: flex-end;
+  padding: 24px;
+}
+.fc-image-pattern {
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(232,160,32,0.08) 8px, rgba(232,160,32,0.08) 9px);
+}
+.fc-badge {
+  position: relative; z-index: 2;
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  background: var(--terracotta);
+  color: var(--bone);
+  padding: 4px 10px;
+  border-radius: 1px;
+}
+.fc-live-dot {
+  display: inline-block;
+  width: 6px; height: 6px;
+  background: var(--kente-gold);
+  border-radius: 50%;
+  margin-right: 6px;
+  animation: pulse 1.5s ease-in-out infinite;
+}
+@keyframes pulse {
+  0%, 100% { opacity: 1; transform: scale(1); }
+  50% { opacity: 0.5; transform: scale(0.8); }
+}
+.fc-body { padding: 24px; }
+.fc-artist {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -1px;
+  color: var(--bone);
+  margin-bottom: 4px;
+}
+.fc-event-name {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--kente-gold);
+  margin-bottom: 16px;
+}
+.fc-meta {
+  display: flex; gap: 24px; margin-bottom: 20px;
+}
+.fc-meta-item {
+  font-size: 13px; color: var(--ash);
+  display: flex; align-items: center; gap: 6px;
+}
+.fc-meta-icon { font-size: 14px; }
+.fc-tiers {
+  display: flex; gap: 8px; margin-bottom: 20px; flex-wrap: wrap;
+}
+.fc-tier {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.08em;
+  padding: 5px 12px;
+  border: 1px solid rgba(232,160,32,0.2);
+  border-radius: 2px;
+  color: var(--ash);
+}
+.fc-tier.available { border-color: var(--kente-gold); color: var(--kente-gold); }
+.fc-tier.sold-out { opacity: 0.4; text-decoration: line-through; }
+.fc-actions { display: flex; gap: 10px; }
+
+/* ═══════════════════════════════════════════
+   SECTION COMMONS
+═══════════════════════════════════════════ */
+.section-pad { padding: 100px 80px; }
+.section-pad-sm { padding: 60px 80px; }
+
+.section-eyebrow {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--kente-gold);
+  margin-bottom: 16px;
+  display: flex; align-items: center; gap: 10px;
+}
+.section-eyebrow::before {
+  content: ''; width: 20px; height: 1px; background: var(--kente-gold);
+}
+
+.section-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: clamp(36px, 3.5vw, 52px);
+  letter-spacing: -2px;
+  line-height: 0.95;
+  margin-bottom: 16px;
+}
+
+.section-divider {
+  height: 1px;
+  background: linear-gradient(90deg, var(--kente-gold), transparent);
+  margin: 0;
+}
+
+.gold-rule {
+  height: 3px;
+  width: 48px;
+  background: var(--kente-gold);
+  margin-bottom: 32px;
+}
+
+/* ═══════════════════════════════════════════
+   EVENTS GRID
+═══════════════════════════════════════════ */
+.events-section { background: var(--inkblack); }
+.events-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+  margin-bottom: 48px;
+}
+
+.filter-bar {
+  display: flex;
+  gap: 8px;
+  margin-bottom: 48px;
+  flex-wrap: wrap;
+}
+.filter-chip {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  padding: 7px 16px;
+  border: 1px solid rgba(155,149,137,0.3);
+  border-radius: 2px;
+  color: var(--ash);
+  background: transparent;
+  cursor: pointer;
+  transition: all 0.2s;
+}
+.filter-chip:hover, .filter-chip.active {
+  border-color: var(--kente-gold);
+  color: var(--kente-gold);
+  background: rgba(232,160,32,0.08);
+}
+
+.events-grid {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 2px;
+}
+
+.event-card {
+  background: rgba(26,44,91,0.15);
+  border: 1px solid rgba(242,237,228,0.06);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s, transform 0.2s;
+  position: relative;
+}
+.event-card:hover {
+  border-color: rgba(232,160,32,0.35);
+  transform: translateY(-2px);
+}
+.event-card.featured {
+  grid-column: span 2;
+}
+
+.ec-thumb {
+  width: 100%;
+  height: 180px;
+  position: relative;
+  overflow: hidden;
+}
+.event-card.featured .ec-thumb { height: 260px; }
+.ec-thumb-bg {
+  width: 100%; height: 100%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 48px;
+  position: relative;
+}
+.ec-thumb-overlay {
+  position: absolute; inset: 0;
+  background: linear-gradient(to bottom, transparent 40%, rgba(10,10,8,0.9) 100%);
+}
+.ec-type-badge {
+  position: absolute;
+  top: 12px; left: 12px;
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 1px;
+  z-index: 2;
+}
+.ec-type-live { background: var(--terracotta); color: var(--bone); }
+.ec-type-virtual { background: var(--ocean-teal); color: var(--bone); }
+.ec-type-festival { background: var(--adire-indigo); color: var(--kente-gold); }
+
+.ec-date-block {
+  position: absolute;
+  top: 12px; right: 12px;
+  background: rgba(10,10,8,0.85);
+  border: 1px solid rgba(232,160,32,0.3);
+  padding: 8px 12px;
+  text-align: center;
+  z-index: 2;
+  backdrop-filter: blur(4px);
+}
+.ec-date-day {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 22px;
+  color: var(--kente-gold);
+  line-height: 1;
+}
+.ec-date-mon {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ash);
+  margin-top: 2px;
+}
+
+.ec-body { padding: 20px; }
+.ec-venue {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--kente-gold);
+  margin-bottom: 6px;
+}
+.ec-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+  letter-spacing: -0.5px;
+  color: var(--bone);
+  margin-bottom: 4px;
+  line-height: 1.1;
+}
+.event-card.featured .ec-name { font-size: 28px; }
+.ec-desc {
+  font-size: 13px;
+  color: var(--ash);
+  margin-bottom: 16px;
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.ec-footer {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-top: 1px solid rgba(242,237,228,0.07);
+  padding-top: 14px;
+}
+.ec-price {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  color: var(--bone);
+}
+.ec-price span {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ash);
+  font-weight: 400;
+  display: block;
+  letter-spacing: 0.1em;
+}
+
+/* ═══════════════════════════════════════════
+   MODAL — TICKET PURCHASE
+═══════════════════════════════════════════ */
+.modal-overlay {
+  display: none;
+  position: fixed; inset: 0;
+  background: rgba(10,10,8,0.88);
+  z-index: 500;
+  backdrop-filter: blur(8px);
+  padding: 40px 20px;
+  overflow-y: auto;
+}
+.modal-overlay.open { display: flex; align-items: flex-start; justify-content: center; }
+.modal {
+  background: var(--inkblack);
+  border: 1px solid rgba(232,160,32,0.2);
+  width: 100%;
+  max-width: 640px;
+  position: relative;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: auto;
+}
+.modal-header {
+  background: var(--adire-indigo);
+  padding: 32px;
+  position: relative;
+  overflow: hidden;
+}
+.modal-header-pattern {
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 8px, rgba(232,160,32,0.06) 8px, rgba(232,160,32,0.06) 9px);
+}
+.modal-header-content { position: relative; z-index: 2; }
+.modal-event-type {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--kente-gold);
+  margin-bottom: 8px;
+}
+.modal-event-name {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 36px;
+  letter-spacing: -1px;
+  line-height: 1;
+  color: var(--bone);
+  margin-bottom: 4px;
+}
+.modal-event-sub {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: rgba(242,237,228,0.5);
+}
+.modal-event-meta {
+  display: flex; gap: 20px; margin-top: 16px;
+}
+.modal-meta-item {
+  display: flex; align-items: center; gap: 6px;
+  font-size: 13px; color: rgba(242,237,228,0.7);
+}
+.modal-close {
+  position: absolute;
+  top: 20px; right: 20px;
+  background: rgba(242,237,228,0.1);
+  border: none; border-radius: 50%;
+  width: 36px; height: 36px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--bone);
+  font-size: 18px;
+  transition: background 0.2s;
+  z-index: 10;
+}
+.modal-close:hover { background: rgba(242,237,228,0.2); }
+
+.modal-tabs {
+  display: flex;
+  border-bottom: 1px solid rgba(242,237,228,0.08);
+}
+.modal-tab {
+  flex: 1;
+  padding: 14px 20px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ash);
+  background: transparent;
+  border: none;
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: all 0.2s;
+}
+.modal-tab.active { color: var(--kente-gold); border-bottom-color: var(--kente-gold); }
+
+.modal-body { padding: 32px; }
+
+/* Ticket tiers */
+.ticket-tier {
+  border: 1px solid rgba(242,237,228,0.1);
+  border-radius: 3px;
+  padding: 16px 20px;
+  margin-bottom: 12px;
+  transition: border-color 0.2s;
+}
+.ticket-tier:hover { border-color: rgba(232,160,32,0.3); }
+.ticket-tier.selected { border-color: var(--kente-gold); background: rgba(232,160,32,0.04); }
+.ticket-tier.sold-out { opacity: 0.4; pointer-events: none; }
+
+.tier-row { display: flex; justify-content: space-between; align-items: flex-start; }
+.tier-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  color: var(--bone);
+}
+.tier-price-col { text-align: right; }
+.tier-price {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 20px;
+  color: var(--kente-gold);
+}
+.tier-price-usd {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: var(--ash);
+  letter-spacing: 0.1em;
+}
+.tier-desc {
+  font-size: 12px;
+  color: var(--ash);
+  margin-top: 4px;
+}
+.tier-availability {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  margin-top: 8px;
+}
+.tier-avail-good { color: var(--palm-green); }
+.tier-avail-low { color: var(--terracotta); }
+.tier-sold { color: var(--ash); }
+
+.qty-control {
+  display: flex; align-items: center; gap: 0;
+  margin-top: 12px;
+}
+.qty-btn {
+  width: 32px; height: 32px;
+  border: 1px solid rgba(232,160,32,0.3);
+  background: transparent;
+  color: var(--kente-gold);
+  font-size: 18px;
+  cursor: pointer;
+  display: flex; align-items: center; justify-content: center;
+  transition: background 0.2s;
+  font-family: var(--font-mono);
+}
+.qty-btn:hover { background: rgba(232,160,32,0.15); }
+.qty-val {
+  width: 48px;
+  text-align: center;
+  font-family: var(--font-mono);
+  font-size: 14px;
+  color: var(--bone);
+  border-top: 1px solid rgba(232,160,32,0.3);
+  border-bottom: 1px solid rgba(232,160,32,0.3);
+  height: 32px;
+  display: flex; align-items: center; justify-content: center;
+}
+
+/* Order summary */
+.order-summary {
+  background: rgba(26,44,91,0.15);
+  border: 1px solid rgba(232,160,32,0.1);
+  border-radius: 3px;
+  padding: 20px;
+  margin-top: 24px;
+}
+.order-row {
+  display: flex; justify-content: space-between;
+  font-size: 14px;
+  color: var(--ash);
+  margin-bottom: 8px;
+}
+.order-row.total {
+  border-top: 1px solid rgba(232,160,32,0.2);
+  padding-top: 12px;
+  margin-top: 8px;
+  color: var(--bone);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 20px;
+}
+
+/* Payment methods */
+.payment-methods {
+  display: flex; gap: 8px; margin: 20px 0; flex-wrap: wrap;
+}
+.payment-method {
+  flex: 1;
+  min-width: 100px;
+  border: 1px solid rgba(155,149,137,0.3);
+  border-radius: 3px;
+  padding: 12px;
+  cursor: pointer;
+  text-align: center;
+  transition: all 0.2s;
+  background: transparent;
+}
+.payment-method:hover { border-color: var(--kente-gold); }
+.payment-method.selected { border-color: var(--kente-gold); background: rgba(232,160,32,0.06); }
+.pm-logo {
+  font-size: 20px; margin-bottom: 4px;
+}
+.pm-name {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+
+/* QR Ticket */
+.qr-ticket {
+  background: var(--bone);
+  color: var(--inkblack);
+  border-radius: 3px;
+  overflow: hidden;
+  padding: 32px;
+  text-align: center;
+  margin-top: 24px;
+}
+.qr-event-name { font-family: var(--font-display); font-weight: 800; font-size: 24px; letter-spacing: -1px; margin-bottom: 4px; color: var(--inkblack); }
+.qr-tier { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--ash); margin-bottom: 20px; }
+.qr-code {
+  width: 140px; height: 140px;
+  margin: 0 auto 20px;
+  background: var(--inkblack);
+  display: grid;
+  grid-template-columns: repeat(7, 1fr);
+  grid-template-rows: repeat(7, 1fr);
+  gap: 2px;
+  padding: 8px;
+  border-radius: 2px;
+}
+.qr-pixel {
+  background: var(--inkblack);
+  border-radius: 1px;
+}
+.qr-pixel.white { background: var(--bone); }
+.qr-code-num { font-family: var(--font-mono); font-size: 11px; letter-spacing: 0.2em; color: var(--ash); margin-bottom: 4px; }
+.qr-holder { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--inkblack); }
+.qr-perforated {
+  border-top: 2px dashed rgba(10,10,8,0.15);
+  margin: 20px -32px;
+  padding: 0 32px;
+}
+
+/* ═══════════════════════════════════════════
+   TIPPING SECTION
+═══════════════════════════════════════════ */
+.tip-section { background: var(--adire-indigo); padding: 80px; position: relative; overflow: hidden; }
+.tip-bg-pattern {
+  position: absolute; inset: 0;
+  background-image: repeating-linear-gradient(45deg, transparent, transparent 19px, rgba(232,160,32,0.04) 19px, rgba(232,160,32,0.04) 20px);
+  pointer-events: none;
+}
+.tip-grid {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 80px;
+  position: relative; z-index: 2;
+}
+.tip-amounts {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 8px;
+  margin: 20px 0;
+}
+.tip-amount-btn {
+  border: 1px solid rgba(232,160,32,0.3);
+  background: transparent;
+  color: var(--kente-gold);
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 18px;
+  padding: 14px 8px;
+  cursor: pointer;
+  border-radius: 2px;
+  transition: all 0.2s;
+}
+.tip-amount-btn:hover, .tip-amount-btn.selected {
+  background: var(--kente-gold);
+  color: var(--inkblack);
+}
+.tip-custom-input {
+  display: flex; gap: 0;
+  margin-bottom: 20px;
+}
+.tip-currency {
+  background: rgba(232,160,32,0.15);
+  border: 1px solid rgba(232,160,32,0.3);
+  border-right: none;
+  padding: 10px 14px;
+  font-family: var(--font-mono);
+  font-size: 12px;
+  color: var(--kente-gold);
+  display: flex; align-items: center;
+}
+.tip-input {
+  flex: 1;
+  background: rgba(10,10,8,0.5);
+  border: 1px solid rgba(232,160,32,0.3);
+  color: var(--bone);
+  font-family: var(--font-mono);
+  font-size: 16px;
+  padding: 10px 16px;
+  outline: none;
+  width: 100%;
+}
+.tip-input:focus { border-color: var(--kente-gold); }
+.tip-message-input {
+  width: 100%;
+  background: rgba(10,10,8,0.5);
+  border: 1px solid rgba(242,237,228,0.1);
+  color: var(--bone);
+  font-family: var(--font-body);
+  font-size: 14px;
+  padding: 12px 16px;
+  outline: none;
+  border-radius: 2px;
+  resize: none;
+  height: 80px;
+  margin-bottom: 20px;
+}
+.tip-message-input:focus { border-color: rgba(232,160,32,0.4); }
+
+.artist-card {
+  display: flex; align-items: center; gap: 16px;
+  padding: 20px;
+  background: rgba(10,10,8,0.4);
+  border: 1px solid rgba(232,160,32,0.15);
+  border-radius: 3px;
+  margin-bottom: 32px;
+}
+.artist-avatar {
+  width: 56px; height: 56px;
+  border-radius: 50%;
+  background: linear-gradient(135deg, var(--terracotta), var(--kente-gold));
+  display: flex; align-items: center; justify-content: center;
+  font-size: 24px;
+  flex-shrink: 0;
+}
+.artist-name { font-family: var(--font-display); font-weight: 700; font-size: 18px; color: var(--bone); }
+.artist-genre { font-family: var(--font-mono); font-size: 9px; letter-spacing: 0.2em; text-transform: uppercase; color: var(--kente-gold); margin-top: 2px; }
+.artist-tip-total { margin-left: auto; text-align: right; }
+.tip-total-num { font-family: var(--font-display); font-weight: 800; font-size: 22px; color: var(--kente-gold); }
+.tip-total-label { font-family: var(--font-mono); font-size: 8px; letter-spacing: 0.15em; color: var(--ash); text-transform: uppercase; }
+
+.recent-tips { }
+.recent-tips-title {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ash);
+  margin-bottom: 16px;
+}
+.tip-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(242,237,228,0.06);
+}
+.tip-item-from { font-size: 14px; color: var(--bone); }
+.tip-item-msg { font-size: 12px; color: var(--ash); font-style: italic; }
+.tip-item-amount { font-family: var(--font-display); font-weight: 700; font-size: 16px; color: var(--kente-gold); }
+.tip-item-time { font-family: var(--font-mono); font-size: 9px; color: var(--ash); margin-top: 2px; text-align: right; }
+
+/* ═══════════════════════════════════════════
+   DIGITAL STORE
+═══════════════════════════════════════════ */
+.store-section { background: var(--inkblack); }
+.store-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-top: 48px;
+}
+.product-card {
+  background: rgba(26,44,91,0.1);
+  border: 1px solid rgba(242,237,228,0.06);
+  overflow: hidden;
+  cursor: pointer;
+  transition: border-color 0.3s;
+}
+.product-card:hover { border-color: rgba(232,160,32,0.3); }
+.product-thumb {
+  height: 160px;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 40px;
+  position: relative;
+  overflow: hidden;
+}
+.product-body { padding: 16px; }
+.product-type {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ocean-teal);
+  margin-bottom: 6px;
+}
+.product-name {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 15px;
+  letter-spacing: -0.3px;
+  color: var(--bone);
+  margin-bottom: 4px;
+  line-height: 1.2;
+}
+.product-artist { font-size: 12px; color: var(--ash); margin-bottom: 12px; }
+.product-footer { display: flex; justify-content: space-between; align-items: center; }
+.product-price { font-family: var(--font-display); font-weight: 800; font-size: 18px; color: var(--kente-gold); }
+
+/* ═══════════════════════════════════════════
+   DASHBOARD
+═══════════════════════════════════════════ */
+.dashboard-layout {
+  display: grid;
+  grid-template-columns: 220px 1fr;
+  min-height: 100vh;
+  padding-top: 64px;
+}
+.dash-sidebar {
+  background: rgba(26,44,91,0.25);
+  border-right: 1px solid rgba(232,160,32,0.1);
+  padding: 40px 0;
+  position: sticky;
+  top: 64px;
+  height: calc(100vh - 64px);
+  overflow-y: auto;
+}
+.sidebar-section-title {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--ash);
+  padding: 0 24px;
+  margin-bottom: 8px;
+  margin-top: 24px;
+}
+.sidebar-link {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  padding: 10px 24px;
+  font-size: 13px;
+  color: var(--ash);
+  cursor: pointer;
+  transition: all 0.2s;
+  border-left: 2px solid transparent;
+}
+.sidebar-link:hover { color: var(--bone); background: rgba(232,160,32,0.05); }
+.sidebar-link.active { color: var(--kente-gold); border-left-color: var(--kente-gold); background: rgba(232,160,32,0.06); }
+.sidebar-link .sl-icon { font-size: 16px; width: 20px; text-align: center; }
+
+.dash-main { padding: 48px; overflow-y: auto; }
+
+.dash-header-row {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-start;
+  margin-bottom: 40px;
+}
+.dash-greeting {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 36px;
+  letter-spacing: -1.5px;
+  color: var(--bone);
+}
+.dash-subtitle { font-size: 14px; color: var(--ash); margin-top: 4px; }
+
+.kpi-grid {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 2px;
+  margin-bottom: 40px;
+}
+.kpi-card {
+  background: rgba(26,44,91,0.2);
+  border: 1px solid rgba(232,160,32,0.1);
+  padding: 24px;
+  position: relative;
+  overflow: hidden;
+}
+.kpi-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0;
+  width: 3px; height: 100%;
+  background: var(--kente-gold);
+}
+.kpi-label {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.25em;
+  text-transform: uppercase;
+  color: var(--ash);
+  margin-bottom: 10px;
+}
+.kpi-value {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 32px;
+  letter-spacing: -1.5px;
+  color: var(--kente-gold);
+}
+.kpi-change {
+  font-family: var(--font-mono);
+  font-size: 10px;
+  margin-top: 4px;
+}
+.kpi-up { color: var(--palm-green); }
+.kpi-down { color: var(--terracotta); }
+
+.dash-two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 24px; }
+.dash-card {
+  background: rgba(26,44,91,0.15);
+  border: 1px solid rgba(232,160,32,0.1);
+  padding: 24px;
+  border-radius: 2px;
+}
+.dash-card-title {
+  font-family: var(--font-display);
+  font-weight: 700;
+  font-size: 16px;
+  letter-spacing: -0.3px;
+  color: var(--bone);
+  margin-bottom: 20px;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+}
+.dash-card-tag {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+  color: var(--kente-gold);
+  border: 1px solid rgba(232,160,32,0.3);
+  padding: 2px 8px;
+}
+
+/* Activity feed */
+.activity-item {
+  display: flex; align-items: flex-start; gap: 12px;
+  padding: 10px 0;
+  border-bottom: 1px solid rgba(242,237,228,0.05);
+}
+.activity-icon {
+  width: 32px; height: 32px;
+  border-radius: 50%;
+  display: flex; align-items: center; justify-content: center;
+  font-size: 14px;
+  flex-shrink: 0;
+}
+.ai-ticket { background: rgba(232,160,32,0.15); }
+.ai-tip { background: rgba(196,82,42,0.15); }
+.ai-sale { background: rgba(27,122,110,0.15); }
+.activity-text { font-size: 13px; color: var(--bone); }
+.activity-sub { font-size: 11px; color: var(--ash); margin-top: 2px; }
+.activity-time { font-family: var(--font-mono); font-size: 9px; color: var(--ash); margin-left: auto; flex-shrink: 0; }
+
+/* Tickets list */
+.ticket-list-item {
+  display: flex; justify-content: space-between; align-items: center;
+  padding: 12px 0;
+  border-bottom: 1px solid rgba(242,237,228,0.05);
+}
+.tli-event { font-size: 14px; color: var(--bone); }
+.tli-date { font-family: var(--font-mono); font-size: 10px; color: var(--ash); margin-top: 2px; }
+.tli-status {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  padding: 3px 8px;
+  border-radius: 1px;
+}
+.status-upcoming { background: rgba(232,160,32,0.15); color: var(--kente-gold); }
+.status-attended { background: rgba(45,80,22,0.3); color: #7ec850; }
+.status-virtual { background: rgba(27,122,110,0.2); color: var(--ocean-teal); }
+
+/* Admin bar indicator */
+.admin-badge {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  background: var(--terracotta);
+  color: var(--bone);
+  padding: 3px 8px;
+  border-radius: 1px;
+  margin-left: 8px;
+}
+
+/* ═══════════════════════════════════════════
+   AUTH MODAL
+═══════════════════════════════════════════ */
+.auth-modal {
+  background: var(--inkblack);
+  border: 1px solid rgba(232,160,32,0.15);
+  width: 100%;
+  max-width: 440px;
+  border-radius: 4px;
+  overflow: hidden;
+  margin: auto;
+}
+.auth-header {
+  padding: 32px 32px 0;
+}
+.auth-title {
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: 28px;
+  letter-spacing: -1px;
+  color: var(--bone);
+  margin-bottom: 4px;
+}
+.auth-subtitle { font-size: 14px; color: var(--ash); }
+
+.auth-body { padding: 32px; }
+.form-group { margin-bottom: 16px; }
+.form-label {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ash);
+  display: block;
+  margin-bottom: 6px;
+}
+.form-input {
+  width: 100%;
+  background: rgba(242,237,228,0.05);
+  border: 1px solid rgba(155,149,137,0.25);
+  color: var(--bone);
+  font-family: var(--font-body);
+  font-size: 15px;
+  padding: 12px 16px;
+  outline: none;
+  border-radius: 2px;
+  transition: border-color 0.2s;
+}
+.form-input:focus { border-color: var(--kente-gold); }
+.form-input::placeholder { color: rgba(155,149,137,0.5); }
+
+.auth-divider {
+  display: flex; align-items: center; gap: 16px;
+  margin: 20px 0;
+}
+.auth-divider::before, .auth-divider::after {
+  content: ''; flex: 1; height: 1px; background: rgba(242,237,228,0.08);
+}
+.auth-divider-text {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--ash);
+}
+.auth-social-btns { display: flex; gap: 8px; }
+.auth-social-btn {
+  flex: 1;
+  border: 1px solid rgba(155,149,137,0.25);
+  background: transparent;
+  color: var(--ash);
+  padding: 10px;
+  border-radius: 2px;
+  cursor: pointer;
+  font-size: 13px;
+  transition: all 0.2s;
+  display: flex; align-items: center; justify-content: center; gap: 8px;
+}
+.auth-social-btn:hover { border-color: var(--bone); color: var(--bone); }
+.auth-footer {
+  padding: 0 32px 24px;
+  text-align: center;
+  font-size: 13px;
+  color: var(--ash);
+}
+.auth-footer a { color: var(--kente-gold); cursor: pointer; text-decoration: none; }
+
+/* ═══════════════════════════════════════════
+   TOAST NOTIFICATION
+═══════════════════════════════════════════ */
+.toast-container {
+  position: fixed;
+  bottom: 32px; right: 32px;
+  z-index: 1000;
+  display: flex; flex-direction: column; gap: 8px;
+}
+.toast {
+  background: var(--inkblack);
+  border: 1px solid rgba(232,160,32,0.3);
+  border-left: 3px solid var(--kente-gold);
+  padding: 14px 20px;
+  border-radius: 2px;
+  font-size: 14px;
+  color: var(--bone);
+  max-width: 320px;
+  animation: slideIn 0.3s ease;
+  display: flex; align-items: center; gap: 10px;
+}
+.toast.success { border-left-color: #7ec850; }
+.toast.error { border-left-color: var(--terracotta); }
+@keyframes slideIn {
+  from { transform: translateX(40px); opacity: 0; }
+  to { transform: translateX(0); opacity: 1; }
+}
+
+/* ═══════════════════════════════════════════
+   FOOTER
+═══════════════════════════════════════════ */
+footer {
+  background: var(--inkblack);
+  border-top: 1px solid rgba(232,160,32,0.12);
+  padding: 60px 80px 40px;
+}
+.footer-grid {
+  display: grid;
+  grid-template-columns: 2fr 1fr 1fr 1fr;
+  gap: 60px;
+  margin-bottom: 48px;
+}
+.footer-brand-desc {
+  font-size: 14px;
+  color: var(--ash);
+  line-height: 1.6;
+  margin-top: 16px;
+  max-width: 280px;
+}
+.footer-heading {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.3em;
+  text-transform: uppercase;
+  color: var(--kente-gold);
+  margin-bottom: 16px;
+}
+.footer-links { list-style: none; }
+.footer-links li { margin-bottom: 8px; }
+.footer-links a {
+  font-size: 13px; color: var(--ash); cursor: pointer;
+  text-decoration: none; transition: color 0.2s;
+}
+.footer-links a:hover { color: var(--bone); }
+.footer-bottom {
+  display: flex; justify-content: space-between; align-items: center;
+  padding-top: 24px;
+  border-top: 1px solid rgba(242,237,228,0.06);
+  font-family: var(--font-mono);
+  font-size: 9px;
+  color: rgba(155,149,137,0.5);
+  letter-spacing: 0.1em;
+  text-transform: uppercase;
+}
+
+/* ═══════════════════════════════════════════
+   ADMIN VIEW
+═══════════════════════════════════════════ */
+.admin-view { background: var(--inkblack); min-height: 100vh; padding-top: 64px; }
+.admin-content { display: grid; grid-template-columns: 220px 1fr; }
+.admin-topbar {
+  background: rgba(196,82,42,0.12);
+  border-bottom: 1px solid rgba(196,82,42,0.25);
+  padding: 10px 40px;
+  display: flex; align-items: center; gap: 12px;
+  font-family: var(--font-mono);
+  font-size: 10px;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  color: var(--terracotta);
+}
+
+.table-wrap {
+  overflow-x: auto;
+  margin-top: 24px;
+}
+table {
+  width: 100%;
+  border-collapse: collapse;
+}
+th {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: var(--ash);
+  text-align: left;
+  padding: 10px 16px;
+  border-bottom: 1px solid rgba(242,237,228,0.08);
+}
+td {
+  padding: 12px 16px;
+  border-bottom: 1px solid rgba(242,237,228,0.04);
+  font-size: 13px;
+  color: var(--bone);
+}
+tr:hover td { background: rgba(232,160,32,0.03); }
+
+/* ═══════════════════════════════════════════
+   MICRO ANIMATIONS
+═══════════════════════════════════════════ */
+@keyframes fadeUp {
+  from { opacity: 0; transform: translateY(20px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+.animate-in {
+  animation: fadeUp 0.5s ease forwards;
+}
+
+/* Responsive helpers */
+@media (max-width: 900px) {
+  nav { padding: 0 20px; }
+  .hero { grid-template-columns: 1fr; }
+  .hero::after { display: none; }
+  .hero-right { display: none; }
+  .hero-left { padding: 60px 32px; }
+  .events-grid { grid-template-columns: 1fr 1fr; }
+  .event-card.featured { grid-column: span 2; }
+  .store-grid { grid-template-columns: repeat(2, 1fr); }
+  .kpi-grid { grid-template-columns: repeat(2, 1fr); }
+  .dashboard-layout { grid-template-columns: 1fr; }
+  .dash-sidebar { display: none; }
+  .dash-main { padding: 24px; }
+  .tip-grid { grid-template-columns: 1fr; }
+  .section-pad { padding: 60px 32px; }
+  .footer-grid { grid-template-columns: 1fr 1fr; }
+}
+</style>
+</head>
+<body>
+
+<!-- ═══ NAV ═══ -->
+<nav>
+  <div class="nav-logo" onclick="showView('home')">
+    <span class="nav-logo-front">Front</span>
+    <div class="nav-logo-row-wrap">
+      <span class="nav-logo-row">Row</span>
+      <span class="nav-logo-dot"></span>
+    </div>
+    <span class="nav-logo-sub">Africa</span>
+  </div>
+
+  <ul class="nav-links">
+    <li><a onclick="showView('home')" id="nav-home" class="active">Home</a></li>
+    <li><a onclick="showView('events')" id="nav-events">Events</a></li>
+    <li><a onclick="showView('store')" id="nav-store">Store</a></li>
+    <li><a onclick="showView('tip')" id="nav-tip">Tip Artists</a></li>
+    <li><a onclick="showView('dashboard')" id="nav-dashboard">My Tickets</a></li>
+    <li><a onclick="showView('admin')" id="nav-admin">Admin <span class="admin-badge">Pro</span></a></li>
+  </ul>
+
+  <div class="nav-actions">
+    <button class="btn btn-ghost" onclick="openAuthModal('login')">Sign In</button>
+    <button class="btn btn-primary" onclick="openAuthModal('register')">Join Free</button>
+  </div>
+</nav>
+
+<!-- ═══ VIEWS ═══ -->
+
+<!-- HOME -->
+<div class="view active" id="view-home">
+  <section class="hero">
+    <div class="hero-pattern"></div>
+    <div class="hero-left animate-in">
+      <div class="hero-eyebrow">Live Events · Digital Content · Artist Tipping</div>
+      <h1 class="hero-title">
+        <span class="line-block">Your seat</span>
+        <span class="line-block gold">at the front</span>
+        <span class="line-block">of Africa.</span>
+      </h1>
+      <p class="hero-sub">Tickets for live and virtual events across the continent. Tip your favourite artists. Own the music, the films, the books.</p>
+      <div class="hero-cta-row">
+        <button class="btn btn-primary" style="font-size:13px;padding:12px 28px;" onclick="showView('events')">Browse Events</button>
+        <button class="btn btn-outline" style="font-size:13px;padding:12px 28px;" onclick="showView('store')">Explore Store</button>
+      </div>
+      <div class="hero-stats">
+        <div class="stat-item">
+          <div class="stat-num">240+</div>
+          <div class="stat-label">Live Events</div>
+        </div>
+        <div class="stat-item" style="padding-left:24px;">
+          <div class="stat-num">18K</div>
+          <div class="stat-label">Tickets Sold</div>
+        </div>
+        <div class="stat-item" style="padding-left:24px;">
+          <div class="stat-num">KES 4.2M</div>
+          <div class="stat-label">Artist Tips</div>
+        </div>
+      </div>
+    </div>
+    <div class="hero-right">
+      <div class="featured-card">
+        <div class="fc-image">
+          <div class="fc-image-pattern"></div>
+          <span class="fc-badge"><span class="fc-live-dot"></span>On Sale Now</span>
+        </div>
+        <div class="fc-body">
+          <div class="fc-event-name">Sawa Sawa Festival 2025</div>
+          <div class="fc-artist">Sauti Sol</div>
+          <div class="fc-meta">
+            <div class="fc-meta-item"><span class="fc-meta-icon">📍</span>Kasarani, Nairobi</div>
+            <div class="fc-meta-item"><span class="fc-meta-icon">📅</span>Sat, 14 Jun</div>
+          </div>
+          <div class="fc-tiers">
+            <div class="fc-tier sold-out">Early Bird — KES 3,500</div>
+            <div class="fc-tier available">Front Row — KES 5,000</div>
+            <div class="fc-tier available">General — KES 3,000</div>
+          </div>
+          <div class="fc-actions">
+            <button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="openTicketModal('Sauti Sol — Sawa Sawa Festival', 'Kasarani Stadium, Nairobi', 'Sat 14 Jun 2025')">Get Tickets</button>
+            <button class="btn btn-ghost" onclick="showView('tip')">Tip Artist 🎤</button>
+          </div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Featured events strip -->
+  <section class="section-pad" style="background:rgba(26,44,91,0.12);">
+    <div class="section-eyebrow">This Week</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:40px;">
+      <h2 class="section-title">Happening Now</h2>
+      <button class="btn btn-outline" onclick="showView('events')">All Events →</button>
+    </div>
+    <div class="events-grid">
+      <!-- Event cards generated by JS -->
+    </div>
+  </section>
+
+  <!-- Services -->
+  <section class="section-pad" style="background:var(--inkblack);">
+    <div class="section-eyebrow">Platform Features</div>
+    <h2 class="section-title" style="margin-bottom:48px;">Everything the<br>front row needs.</h2>
+    <div style="display:grid;grid-template-columns:repeat(3,1fr);gap:2px;">
+      <div style="padding:40px;background:rgba(26,44,91,0.15);border:1px solid rgba(232,160,32,0.08);border-left:3px solid var(--kente-gold);">
+        <div style="font-size:32px;margin-bottom:16px;">🎫</div>
+        <div style="font-family:var(--font-display);font-weight:700;font-size:20px;letter-spacing:-0.5px;margin-bottom:10px;color:var(--bone);">Ticketing</div>
+        <div style="font-size:14px;color:var(--ash);line-height:1.6;">Live and virtual events. Instant QR codes. M-Pesa, Airtel Money, Visa. Multiple tiers per show.</div>
+      </div>
+      <div style="padding:40px;background:rgba(196,82,42,0.08);border:1px solid rgba(196,82,42,0.15);border-left:3px solid var(--terracotta);">
+        <div style="font-size:32px;margin-bottom:16px;">💰</div>
+        <div style="font-family:var(--font-display);font-weight:700;font-size:20px;letter-spacing:-0.5px;margin-bottom:10px;color:var(--bone);">Artist Tips</div>
+        <div style="font-size:14px;color:var(--ash);line-height:1.6;">Send love directly to artists before, during, or after shows. M-Pesa, PayPal, card. Real-time leaderboard.</div>
+      </div>
+      <div style="padding:40px;background:rgba(27,122,110,0.08);border:1px solid rgba(27,122,110,0.15);border-left:3px solid var(--ocean-teal);">
+        <div style="font-size:32px;margin-bottom:16px;">🎵</div>
+        <div style="font-family:var(--font-display);font-weight:700;font-size:20px;letter-spacing:-0.5px;margin-bottom:10px;color:var(--bone);">Digital Store</div>
+        <div style="font-size:14px;color:var(--ash);line-height:1.6;">Buy albums, ebooks, exclusive video drops. Own the culture. Artists keep 85% of every sale.</div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Footer -->
+  <footer>
+    <div class="footer-grid">
+      <div>
+        <div class="nav-logo" style="cursor:default;">
+          <span class="nav-logo-front" style="font-size:22px;">Front</span>
+          <div class="nav-logo-row-wrap"><span class="nav-logo-row" style="font-size:22px;">Row</span><span class="nav-logo-dot" style="width:6px;height:6px;margin-bottom:4px;"></span></div>
+          <span class="nav-logo-sub">Africa</span>
+        </div>
+        <p class="footer-brand-desc">The premium ticketing and artist monetisation platform for Africa. Live events, digital culture, real connections.</p>
+      </div>
+      <div>
+        <div class="footer-heading">Platform</div>
+        <ul class="footer-links">
+          <li><a onclick="showView('events')">Browse Events</a></li>
+          <li><a onclick="showView('store')">Digital Store</a></li>
+          <li><a onclick="showView('tip')">Tip Artists</a></li>
+          <li><a>Virtual Events</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Support</div>
+        <ul class="footer-links">
+          <li><a>Help Centre</a></li>
+          <li><a>Refund Policy</a></li>
+          <li><a>Contact Us</a></li>
+          <li><a>For Organisers</a></li>
+        </ul>
+      </div>
+      <div>
+        <div class="footer-heading">Payments</div>
+        <div style="font-size:24px;display:flex;gap:12px;flex-wrap:wrap;margin-top:8px;">
+          <span title="M-Pesa">📱</span>
+          <span title="Visa">💳</span>
+          <span title="PayPal">🅿</span>
+          <span title="Airtel Money">📲</span>
+        </div>
+        <div style="margin-top:20px;font-size:12px;color:var(--ash);line-height:1.6;">KES · USD · GHS · NGN<br>All payments secure & encrypted.</div>
+      </div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2025 FrontRow Africa. All rights reserved.</span>
+      <span>frontrow.africa · Nairobi · Lagos · Accra</span>
+    </div>
+  </footer>
+</div>
+
+<!-- EVENTS -->
+<div class="view" id="view-events">
+  <div class="section-pad" style="padding-top:100px;">
+    <div class="section-eyebrow">All Events</div>
+    <div class="events-header">
+      <div>
+        <h2 class="section-title">Live & Virtual<br>Events</h2>
+      </div>
+      <div style="display:flex;gap:8px;align-items:center;">
+        <input type="text" placeholder="Search events, artists, venues…" style="background:rgba(242,237,228,0.05);border:1px solid rgba(155,149,137,0.3);color:var(--bone);font-family:var(--font-body);font-size:14px;padding:10px 16px;outline:none;border-radius:2px;width:280px;" onfocus="this.style.borderColor='rgba(232,160,32,0.5)'" onblur="this.style.borderColor='rgba(155,149,137,0.3)'">
+        <select style="background:rgba(10,10,8,0.8);border:1px solid rgba(155,149,137,0.3);color:var(--ash);font-family:var(--font-mono);font-size:10px;letter-spacing:0.1em;padding:10px 16px;outline:none;border-radius:2px;text-transform:uppercase;">
+          <option>All Cities</option>
+          <option>Nairobi</option>
+          <option>Lagos</option>
+          <option>Accra</option>
+          <option>Dar es Salaam</option>
+        </select>
+      </div>
+    </div>
+    <div class="filter-bar" id="events-filter-bar">
+      <button class="filter-chip active" onclick="filterEvents(this, 'all')">All</button>
+      <button class="filter-chip" onclick="filterEvents(this, 'live')">Live Events</button>
+      <button class="filter-chip" onclick="filterEvents(this, 'virtual')">Virtual</button>
+      <button class="filter-chip" onclick="filterEvents(this, 'festival')">Festivals</button>
+      <button class="filter-chip" onclick="filterEvents(this, 'afrobeats')">Afrobeats</button>
+      <button class="filter-chip" onclick="filterEvents(this, 'gospel')">Gospel</button>
+      <button class="filter-chip" onclick="filterEvents(this, 'jazz')">Jazz</button>
+    </div>
+    <div class="events-grid" id="all-events-grid"></div>
+  </div>
+</div>
+
+<!-- STORE -->
+<div class="view" id="view-store">
+  <div class="section-pad" style="padding-top:100px;">
+    <div class="section-eyebrow">Digital Store</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;">
+      <h2 class="section-title">Own the<br>Culture.</h2>
+      <div style="font-size:13px;color:var(--ash);font-style:italic;">Artists keep 85% of every sale.</div>
+    </div>
+    <div class="filter-bar" style="margin-top:32px;">
+      <button class="filter-chip active">All</button>
+      <button class="filter-chip">🎵 Music</button>
+      <button class="filter-chip">📖 Books</button>
+      <button class="filter-chip">🎬 Video</button>
+      <button class="filter-chip">🎤 Live Recordings</button>
+    </div>
+    <div class="store-grid" id="store-grid"></div>
+  </div>
+</div>
+
+<!-- TIP ARTISTS -->
+<div class="view" id="view-tip">
+  <div style="padding-top:64px;">
+    <section class="tip-section">
+      <div class="tip-bg-pattern"></div>
+      <div class="tip-grid">
+        <div>
+          <div class="section-eyebrow" style="color:var(--kente-gold);">Artist Tipping</div>
+          <h2 class="section-title" style="margin-bottom:24px;">Show some<br>real love.</h2>
+          <p style="font-size:16px;color:rgba(242,237,228,0.7);margin-bottom:40px;font-style:italic;line-height:1.6;">Tip directly to the artist. No middleman. No cut (except payment fees). The fastest way to say "this show changed me."</p>
+
+          <div class="artist-card" id="tip-artist-card">
+            <div class="artist-avatar">🎤</div>
+            <div>
+              <div class="artist-name">Sauti Sol</div>
+              <div class="artist-genre">Afrobeats · Nairobi</div>
+            </div>
+            <div class="artist-tip-total">
+              <div class="tip-total-num">KES 128,400</div>
+              <div class="tip-total-label">Total tips today</div>
+            </div>
+          </div>
+
+          <div class="section-eyebrow" style="margin-bottom:16px;">Choose Amount</div>
+          <div class="tip-amounts" id="tip-amounts">
+            <button class="tip-amount-btn" onclick="selectTip(this, 100)">100</button>
+            <button class="tip-amount-btn" onclick="selectTip(this, 250)">250</button>
+            <button class="tip-amount-btn" onclick="selectTip(this, 500)">500</button>
+            <button class="tip-amount-btn" onclick="selectTip(this, 1000)">1,000</button>
+            <button class="tip-amount-btn" onclick="selectTip(this, 2500)">2,500</button>
+            <button class="tip-amount-btn" onclick="selectTip(this, 5000)">5,000</button>
+          </div>
+          <div class="tip-custom-input">
+            <div class="tip-currency">KES</div>
+            <input type="number" class="tip-input" placeholder="Custom amount…" id="tip-custom">
+          </div>
+          <textarea class="tip-message-input" placeholder="Add a message… (optional)"></textarea>
+          <div class="payment-methods">
+            <button class="payment-method selected" onclick="selectPayment(this)">
+              <div class="pm-logo">📱</div>
+              <div class="pm-name">M-Pesa</div>
+            </button>
+            <button class="payment-method" onclick="selectPayment(this)">
+              <div class="pm-logo">🅿</div>
+              <div class="pm-name">PayPal</div>
+            </button>
+            <button class="payment-method" onclick="selectPayment(this)">
+              <div class="pm-logo">💳</div>
+              <div class="pm-name">Card</div>
+            </button>
+          </div>
+          <button class="btn btn-terracotta" style="width:100%;justify-content:center;padding:14px;font-size:13px;margin-top:8px;" onclick="sendTip()">Send Tip 🎤</button>
+        </div>
+
+        <div>
+          <div class="section-eyebrow" style="color:var(--kente-gold);">Recent Tips</div>
+          <h3 style="font-family:var(--font-display);font-weight:700;font-size:20px;letter-spacing:-0.5px;margin-bottom:24px;color:var(--bone);">The love coming in.</h3>
+
+          <div class="recent-tips" id="recent-tips-list"></div>
+
+          <div style="margin-top:40px;padding:24px;background:rgba(10,10,8,0.3);border:1px solid rgba(232,160,32,0.1);border-radius:3px;">
+            <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ash);margin-bottom:16px;">Top Tippers Today</div>
+            <div id="top-tippers"></div>
+          </div>
+
+          <div style="margin-top:24px;padding:20px;background:rgba(10,10,8,0.3);border:1px solid rgba(27,122,110,0.2);">
+            <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ocean-teal);margin-bottom:10px;">Artist Tip Widget</div>
+            <div style="font-size:13px;color:var(--ash);line-height:1.6;">Are you an artist? Embed your tip link anywhere — Instagram bio, website, streaming page. <a style="color:var(--kente-gold);cursor:pointer;">Get your link →</a></div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+</div>
+
+<!-- DASHBOARD -->
+<div class="view" id="view-dashboard">
+  <div class="dashboard-layout">
+    <aside class="dash-sidebar">
+      <div class="sidebar-section-title">My Account</div>
+      <div class="sidebar-link active" onclick="showDashPanel('overview')"><span class="sl-icon">🏠</span>Overview</div>
+      <div class="sidebar-link" onclick="showDashPanel('tickets')"><span class="sl-icon">🎫</span>My Tickets</div>
+      <div class="sidebar-link" onclick="showDashPanel('tips')"><span class="sl-icon">💰</span>Tips Sent</div>
+      <div class="sidebar-link" onclick="showDashPanel('purchases')"><span class="sl-icon">📦</span>Purchases</div>
+
+      <div class="sidebar-section-title">Settings</div>
+      <div class="sidebar-link" onclick=""><span class="sl-icon">👤</span>Profile</div>
+      <div class="sidebar-link" onclick=""><span class="sl-icon">🔔</span>Notifications</div>
+      <div class="sidebar-link" onclick=""><span class="sl-icon">💳</span>Payment Methods</div>
+
+      <div style="padding:24px;margin-top:auto;">
+        <div style="padding:16px;background:rgba(232,160,32,0.08);border:1px solid rgba(232,160,32,0.15);border-radius:3px;">
+          <div style="font-family:var(--font-mono);font-size:8px;letter-spacing:0.2em;text-transform:uppercase;color:var(--kente-gold);margin-bottom:6px;">Front Row Pro</div>
+          <div style="font-size:12px;color:var(--ash);line-height:1.5;margin-bottom:12px;">Priority access, exclusive content, no booking fees.</div>
+          <button class="btn btn-primary" style="width:100%;justify-content:center;font-size:10px;padding:8px;">Upgrade</button>
+        </div>
+      </div>
+    </aside>
+    <main class="dash-main" id="dash-main-content"></main>
+  </div>
+</div>
+
+<!-- ADMIN -->
+<div class="view" id="view-admin">
+  <div class="admin-topbar">
+    ⚡ Admin Panel — FrontRow Africa
+    <span style="color:var(--ash);margin-left:4px;">· Logged in as admin@frontrow.africa</span>
+  </div>
+  <div class="admin-content">
+    <aside class="dash-sidebar">
+      <div class="sidebar-section-title">Management</div>
+      <div class="sidebar-link active" onclick="showAdminPanel('overview')"><span class="sl-icon">📊</span>Overview</div>
+      <div class="sidebar-link" onclick="showAdminPanel('events')"><span class="sl-icon">🎪</span>Events</div>
+      <div class="sidebar-link" onclick="showAdminPanel('tickets')"><span class="sl-icon">🎫</span>Ticket Sales</div>
+      <div class="sidebar-link" onclick="showAdminPanel('products')"><span class="sl-icon">📦</span>Products</div>
+      <div class="sidebar-link" onclick="showAdminPanel('tips')"><span class="sl-icon">💰</span>Tips</div>
+      <div class="sidebar-section-title">Users</div>
+      <div class="sidebar-link"><span class="sl-icon">👥</span>All Users</div>
+      <div class="sidebar-link"><span class="sl-icon">🎤</span>Artists</div>
+      <div class="sidebar-section-title">System</div>
+      <div class="sidebar-link"><span class="sl-icon">⚙️</span>Settings</div>
+      <div class="sidebar-link"><span class="sl-icon">📈</span>Analytics</div>
+    </aside>
+    <main class="dash-main" id="admin-main-content"></main>
+  </div>
+</div>
+
+<!-- MODALS -->
+<div class="modal-overlay" id="ticket-modal">
+  <div class="modal" id="ticket-modal-content"></div>
+</div>
+
+<div class="modal-overlay" id="auth-modal">
+  <div class="auth-modal" id="auth-modal-content"></div>
+</div>
+
+<!-- TOASTS -->
+<div class="toast-container" id="toast-container"></div>
+
+<script>
+/* ═══ DATA ═══ */
+const events = [
+  { id: 1, name: 'Sauti Sol', subtitle: 'Sawa Sawa Festival', venue: 'Kasarani Stadium', city: 'Nairobi', date: '14', month: 'Jun', type: 'festival', emoji: '🎤', featured: true, from: 'KES 3,000', desc: "One night. Kasarani. This is the show you'll tell people you were at.", tiers: [{name:'Front Row Presale',price:5000,avail:'low'},{name:'General Advance',price:3000,avail:'good'},{name:'VIP Table',price:15000,avail:'good'}] },
+  { id: 2, name: 'Burna Boy', subtitle: 'African Giant Tour', venue: 'Eko Convention', city: 'Lagos', date: '22', month: 'Jun', type: 'live', emoji: '🔥', from: 'KES 4,500', desc: 'African Giant. Lagos. June 22nd. History.', tiers: [{name:'Floor',price:4500,avail:'good'},{name:'VIP',price:12000,avail:'low'}] },
+  { id: 3, name: 'Stonebwoy', subtitle: 'Anloga Junction Live', venue: 'Accra Sports Stadium', city: 'Accra', date: '28', month: 'Jun', type: 'live', emoji: '🎵', from: 'GHS 120', desc: 'Reggae-dancehall at its most powerful. Accra, ready?', tiers: [{name:'General',price:120,avail:'good',currency:'GHS'},{name:'VIP',price:350,avail:'good',currency:'GHS'}] },
+  { id: 4, name: 'Nadia Mukami', subtitle: 'Jua Kali Sessions', venue: 'Virtual · YouTube Live', city: 'Nairobi', date: '5', month: 'Jul', type: 'virtual', emoji: '🌟', from: 'KES 500', desc: 'Intimate acoustic session. Stream from anywhere in Africa.', tiers: [{name:'Stream Access',price:500,avail:'good'},{name:'Premium + Q&A',price:1500,avail:'good'}] },
+  { id: 5, name: 'Focalistic', subtitle: 'Ke Star SA Tour', venue: 'Sun Arena', city: 'Pretoria', date: '12', month: 'Jul', type: 'live', emoji: '🎸', from: 'ZAR 350', desc: 'Amapiano royalty. Sun Arena. This summer.', tiers: [{name:'Floor',price:350,avail:'good',currency:'ZAR'}] },
+  { id: 6, name: 'Makossa Night', subtitle: 'Jazz & Soul Festival', venue: 'Alliance Française', city: 'Nairobi', date: '19', month: 'Jul', type: 'festival', emoji: '🎷', from: 'KES 2,000', desc: 'Five acts. One extraordinary night of jazz, makossa and soul.', tiers: [{name:'Early Bird',price:2000,avail:'good'},{name:'Standard',price:2800,avail:'good'}] },
+];
+
+const products = [
+  { name: 'Afrodisiac', artist: 'Sauti Sol', type: 'album', emoji: '🎵', price: 'KES 500', bg: 'linear-gradient(135deg, #E8A020, #C4522A)' },
+  { name: 'Odogwu Diaries', artist: 'Burna Boy', type: 'ebook', emoji: '📖', price: 'KES 350', bg: 'linear-gradient(135deg, #1A2C5B, #0A0A08)' },
+  { name: 'Kasarani Live', artist: 'Sauti Sol', type: 'video', emoji: '🎬', price: 'KES 800', bg: 'linear-gradient(135deg, #2D5016, #1B7A6E)' },
+  { name: 'Melanin & Gold', artist: 'Nadia Mukami', type: 'album', emoji: '🎤', price: 'KES 450', bg: 'linear-gradient(135deg, #D43F1A, #E8A020)' },
+  { name: 'Amapiano Bible', artist: 'Focalistic', type: 'ebook', emoji: '📚', price: 'KES 600', bg: 'linear-gradient(135deg, #9B9589, #1A2C5B)' },
+  { name: 'Anloga Raw', artist: 'Stonebwoy', type: 'video', emoji: '🎥', price: 'GHS 45', bg: 'linear-gradient(135deg, #1B7A6E, #2D5016)' },
+  { name: 'West Africa Now', artist: 'Various Artists', type: 'album', emoji: '🌍', price: 'KES 300', bg: 'linear-gradient(135deg, #C4522A, #1A2C5B)' },
+  { name: 'Sound Architect', artist: 'Ebo Taylor', type: 'ebook', emoji: '🎼', price: 'GHS 30', bg: 'linear-gradient(135deg, #E8A020, #2D5016)' },
+];
+
+const tips = [
+  { from: 'Wanjiku N.', msg: 'That last set was everything 🔥', amount: 'KES 1,000', time: '2m ago' },
+  { from: 'Kofi A.', msg: 'Real African sound, keep going!', amount: 'KES 2,500', time: '7m ago' },
+  { from: 'Anonymous', msg: '', amount: 'KES 500', time: '12m ago' },
+  { from: 'Amara D.', msg: 'Lagos to Nairobi — we feel you', amount: 'KES 5,000', time: '18m ago' },
+  { from: 'Seun B.', msg: '"Melanin & Gold" still in rotation', amount: 'KES 250', time: '25m ago' },
+];
+
+const topTippers = [
+  { name: 'Amara D.', total: 'KES 12,500' },
+  { name: 'Wanjiku N.', total: 'KES 8,200' },
+  { name: 'Kofi A.', total: 'KES 6,750' },
+];
+
+let selectedTipAmount = 0;
+
+/* ═══ VIEW ROUTING ═══ */
+function showView(name) {
+  document.querySelectorAll('.view').forEach(v => v.classList.remove('active'));
+  document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
+  document.getElementById('view-' + name).classList.add('active');
+  const navEl = document.getElementById('nav-' + name);
+  if (navEl) navEl.classList.add('active');
+  window.scrollTo(0, 0);
+
+  if (name === 'events') renderAllEvents();
+  if (name === 'store') renderStore();
+  if (name === 'tip') renderTips();
+  if (name === 'dashboard') renderDashboard();
+  if (name === 'admin') renderAdmin();
+}
+
+/* ═══ EVENTS ═══ */
+function renderEventCards(containerId, items) {
+  const container = document.getElementById(containerId);
+  if (!container) return;
+  container.innerHTML = items.map((e, i) => `
+    <div class="event-card ${e.featured ? 'featured' : ''}" onclick="openTicketModal('${e.name} — ${e.subtitle}', '${e.venue}, ${e.city}', '${e.date} ${e.month} 2025', ${e.id})">
+      <div class="ec-thumb">
+        <div class="ec-thumb-bg" style="background:${e.featured ? 'linear-gradient(135deg, var(--terracotta), var(--adire-indigo))' : 'linear-gradient(135deg, rgba(26,44,91,0.8), rgba(10,10,8,1))'}">${e.emoji}</div>
+        <div class="ec-thumb-overlay"></div>
+        <div class="ec-type-badge ec-type-${e.type}">${e.type === 'virtual' ? '⚡ Virtual' : e.type === 'festival' ? '🎪 Festival' : '📍 Live'}</div>
+        <div class="ec-date-block">
+          <div class="ec-date-day">${e.date}</div>
+          <div class="ec-date-mon">${e.month}</div>
+        </div>
+      </div>
+      <div class="ec-body">
+        <div class="ec-venue">${e.venue} · ${e.city}</div>
+        <div class="ec-name">${e.name}</div>
+        <div class="ec-desc">${e.desc}</div>
+        <div class="ec-footer">
+          <div class="ec-price">From ${e.from}<span>Per ticket</span></div>
+          <button class="btn btn-primary" style="font-size:10px;padding:7px 14px;" onclick="event.stopPropagation();openTicketModal('${e.name} — ${e.subtitle}', '${e.venue}, ${e.city}', '${e.date} ${e.month} 2025', ${e.id})">Get Tickets</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function renderHomeEvents() {
+  // Render events in the homepage section - find by the home events-grid
+  const homeGrids = document.querySelectorAll('#view-home .events-grid');
+  if (homeGrids.length > 0) {
+    const container = homeGrids[0];
+    container.id = 'home-events-grid';
+    renderEventCards('home-events-grid', events.slice(0, 4));
+  }
+}
+
+function renderAllEvents() {
+  renderEventCards('all-events-grid', events);
+}
+
+function filterEvents(btn, type) {
+  document.querySelectorAll('#events-filter-bar .filter-chip').forEach(c => c.classList.remove('active'));
+  btn.classList.add('active');
+  const filtered = type === 'all' ? events : events.filter(e => e.type === type || e.subtitle.toLowerCase().includes(type));
+  renderEventCards('all-events-grid', filtered.length ? filtered : events);
+}
+
+/* ═══ TICKET MODAL ═══ */
+function openTicketModal(name, venue, date, eventId) {
+  const event = events.find(e => e.id === eventId) || events[0];
+  const tiersHtml = (event.tiers || []).map(t => `
+    <div class="ticket-tier ${t.avail === 'sold' ? 'sold-out' : ''}" onclick="selectTier(this)">
+      <div class="tier-row">
+        <div>
+          <div class="tier-name">${t.name}</div>
+          <div class="tier-desc">Standard access</div>
+          <div class="tier-availability ${t.avail === 'low' ? 'tier-avail-low' : 'tier-avail-good'}">
+            ${t.avail === 'low' ? '⚡ Last few remaining' : t.avail === 'sold' ? 'SOLD OUT' : '✓ Available'}
+          </div>
+        </div>
+        <div class="tier-price-col">
+          <div class="tier-price">${t.currency || 'KES'} ${t.price.toLocaleString()}</div>
+        </div>
+      </div>
+      <div class="qty-control">
+        <button class="qty-btn" onclick="event.stopPropagation();changeQty(this, -1)">−</button>
+        <div class="qty-val">0</div>
+        <button class="qty-btn" onclick="event.stopPropagation();changeQty(this, 1)">+</button>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('ticket-modal-content').innerHTML = `
+    <div class="modal-header">
+      <div class="modal-header-pattern"></div>
+      <div class="modal-header-content">
+        <div class="modal-event-type">🎫 Secure Tickets</div>
+        <div class="modal-event-name">${name.split(' — ')[0]}</div>
+        <div class="modal-event-sub">${name.split(' — ')[1] || ''}</div>
+        <div class="modal-event-meta">
+          <div class="modal-meta-item">📍 ${venue}</div>
+          <div class="modal-meta-item">📅 ${date}</div>
+        </div>
+      </div>
+      <button class="modal-close" onclick="closeModal('ticket-modal')">✕</button>
+    </div>
+    <div class="modal-tabs">
+      <button class="modal-tab active" onclick="switchTab(this, 'tab-tickets')">Tickets</button>
+      <button class="modal-tab" onclick="switchTab(this, 'tab-payment')">Payment</button>
+      <button class="modal-tab" onclick="switchTab(this, 'tab-qr')">Your QR</button>
+    </div>
+    <div class="modal-body">
+      <div id="tab-tickets">
+        ${tiersHtml}
+        <div class="order-summary">
+          <div class="order-row"><span>Subtotal</span><span id="subtotal">KES 0</span></div>
+          <div class="order-row"><span>Booking fee</span><span>KES 0</span></div>
+          <div class="order-row total"><span>Total</span><span id="modal-total">KES 0</span></div>
+        </div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;margin-top:16px;font-size:13px;" onclick="switchTabById('tab-payment')">Continue to Payment →</button>
+      </div>
+      <div id="tab-payment" style="display:none;">
+        <div style="font-family:var(--font-mono);font-size:9px;letter-spacing:0.2em;text-transform:uppercase;color:var(--ash);margin-bottom:16px;">Choose Payment Method</div>
+        <div class="payment-methods">
+          <button class="payment-method selected" onclick="selectPayment(this)"><div class="pm-logo">📱</div><div class="pm-name">M-Pesa</div></button>
+          <button class="payment-method" onclick="selectPayment(this)"><div class="pm-logo">📲</div><div class="pm-name">Airtel</div></button>
+          <button class="payment-method" onclick="selectPayment(this)"><div class="pm-logo">💳</div><div class="pm-name">Card</div></button>
+          <button class="payment-method" onclick="selectPayment(this)"><div class="pm-logo">🅿</div><div class="pm-name">PayPal</div></button>
+        </div>
+        <div class="form-group" style="margin-top:20px;">
+          <label class="form-label">Phone (M-Pesa)</label>
+          <input type="tel" class="form-input" placeholder="+254 7XX XXX XXX">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Full Name</label>
+          <input type="text" class="form-input" placeholder="As on your ID">
+        </div>
+        <div class="form-group">
+          <label class="form-label">Email (ticket delivery)</label>
+          <input type="email" class="form-input" placeholder="you@example.com">
+        </div>
+        <div style="font-family:var(--font-mono);font-size:9px;color:var(--ash);margin:16px 0;letter-spacing:0.08em;">You will receive an STK push on your M-Pesa line. Enter your PIN to confirm.</div>
+        <button class="btn btn-primary" style="width:100%;justify-content:center;padding:14px;font-size:13px;" onclick="completePayment()">Pay & Get Tickets →</button>
+      </div>
+      <div id="tab-qr" style="display:none;">
+        <div class="qr-ticket">
+          <div class="qr-event-name">${name.split(' — ')[0]}</div>
+          <div class="qr-tier">Front Row Presale · 1 Ticket</div>
+          <div class="qr-code" id="qr-grid"></div>
+          <div class="qr-code-num">FRA-2025-${Math.random().toString(36).substr(2,8).toUpperCase()}</div>
+          <div class="qr-perforated"></div>
+          <div class="qr-holder">Ticket holder name</div>
+          <div style="font-size:11px;color:var(--ash);margin-top:8px;">Present at gate • One-time scan</div>
+        </div>
+        <div style="display:flex;gap:8px;margin-top:16px;">
+          <button class="btn btn-primary" style="flex:1;justify-content:center;font-size:11px;" onclick="showToast('✅ Ticket saved to your wallet!', 'success')">Save to Wallet</button>
+          <button class="btn btn-ghost" style="flex:1;justify-content:center;font-size:11px;" onclick="showToast('📧 Ticket sent to your email!', 'success')">Email Ticket</button>
+        </div>
+      </div>
+    </div>
+  `;
+  generateQR();
+  document.getElementById('ticket-modal').classList.add('open');
+}
+
+function generateQR() {
+  const qrGrid = document.getElementById('qr-grid');
+  if (!qrGrid) return;
+  // Simple decorative QR-like pattern
+  const pattern = Array.from({length: 49}, (_, i) => {
+    // Corner squares
+    const row = Math.floor(i / 7), col = i % 7;
+    const inCorner = (row < 2 && col < 2) || (row < 2 && col > 4) || (row > 4 && col < 2);
+    return `<div class="qr-pixel ${!inCorner && Math.random() > 0.5 ? 'white' : ''}"></div>`;
+  });
+  qrGrid.innerHTML = pattern.join('');
+}
+
+function closeModal(id) {
+  document.getElementById(id).classList.remove('open');
+}
+
+function selectTier(el) {
+  el.classList.toggle('selected');
+  updateTotal();
+}
+
+function changeQty(btn, delta) {
+  const valEl = btn.parentElement.querySelector('.qty-val');
+  const newVal = Math.max(0, parseInt(valEl.textContent) + delta);
+  valEl.textContent = newVal;
+  updateTotal();
+}
+
+function updateTotal() {
+  const tiers = document.querySelectorAll('.ticket-tier:not(.sold-out)');
+  let total = 0;
+  tiers.forEach((tier, i) => {
+    const qty = parseInt(tier.querySelector('.qty-val')?.textContent || '0');
+    const event = events[0]; // simplification
+    const price = event.tiers[i] ? event.tiers[i].price : 0;
+    total += qty * price;
+  });
+  const fmt = total > 0 ? `KES ${total.toLocaleString()}` : 'KES 0';
+  const sub = document.getElementById('subtotal');
+  const tot = document.getElementById('modal-total');
+  if (sub) sub.textContent = fmt;
+  if (tot) tot.textContent = fmt;
+}
+
+function switchTab(btn, tabId) {
+  document.querySelectorAll('.modal-tab').forEach(t => t.classList.remove('active'));
+  btn.classList.add('active');
+  switchTabById(tabId);
+}
+
+function switchTabById(tabId) {
+  ['tab-tickets', 'tab-payment', 'tab-qr'].forEach(id => {
+    const el = document.getElementById(id);
+    if (el) el.style.display = id === tabId ? 'block' : 'none';
+  });
+  // sync tab buttons
+  document.querySelectorAll('.modal-tab').forEach((t, i) => {
+    t.classList.toggle('active', ['tab-tickets','tab-payment','tab-qr'][i] === tabId);
+  });
+}
+
+function completePayment() {
+  showToast('📱 STK Push sent! Enter your M-Pesa PIN…', 'success');
+  setTimeout(() => {
+    showToast('✅ Payment confirmed! Your ticket is ready.', 'success');
+    switchTabById('tab-qr');
+  }, 2000);
+}
+
+/* ═══ STORE ═══ */
+function renderStore() {
+  document.getElementById('store-grid').innerHTML = products.map(p => `
+    <div class="product-card" onclick="buyProduct('${p.name}', '${p.price}')">
+      <div class="product-thumb" style="background:${p.bg};">${p.emoji}</div>
+      <div class="product-body">
+        <div class="product-type">${p.type}</div>
+        <div class="product-name">${p.name}</div>
+        <div class="product-artist">${p.artist}</div>
+        <div class="product-footer">
+          <div class="product-price">${p.price}</div>
+          <button class="btn btn-outline" style="font-size:9px;padding:5px 12px;" onclick="event.stopPropagation();buyProduct('${p.name}', '${p.price}')">Buy</button>
+        </div>
+      </div>
+    </div>
+  `).join('');
+}
+
+function buyProduct(name, price) {
+  showToast(`🛒 "${name}" added — ${price}. Proceed to checkout.`, 'success');
+}
+
+/* ═══ TIPS ═══ */
+function renderTips() {
+  document.getElementById('recent-tips-list').innerHTML = tips.map(t => `
+    <div class="tip-item">
+      <div>
+        <div class="tip-item-from">${t.from}</div>
+        ${t.msg ? `<div class="tip-item-msg">"${t.msg}"</div>` : ''}
+      </div>
+      <div>
+        <div class="tip-item-amount">${t.amount}</div>
+        <div class="tip-item-time">${t.time}</div>
+      </div>
+    </div>
+  `).join('');
+
+  document.getElementById('top-tippers').innerHTML = topTippers.map((t, i) => `
+    <div style="display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-bottom:1px solid rgba(242,237,228,0.05);">
+      <div style="display:flex;align-items:center;gap:10px;">
+        <span style="font-family:var(--font-mono);font-size:11px;color:var(--kente-gold);">${String(i+1).padStart(2,'0')}</span>
+        <span style="font-size:13px;color:var(--bone);">${t.name}</span>
+      </div>
+      <span style="font-family:var(--font-display);font-weight:700;font-size:14px;color:var(--kente-gold);">${t.total}</span>
+    </div>
+  `).join('');
+}
+
+function selectTip(btn, amount) {
+  document.querySelectorAll('.tip-amount-btn').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+  selectedTipAmount = amount;
+  document.getElementById('tip-custom').value = amount;
+}
+
+function selectPayment(btn) {
+  btn.closest('.payment-methods').querySelectorAll('.payment-method').forEach(b => b.classList.remove('selected'));
+  btn.classList.add('selected');
+}
+
+function sendTip() {
+  const amount = document.getElementById('tip-custom').value || selectedTipAmount;
+  if (!amount || amount < 1) { showToast('Please enter an amount.', 'error'); return; }
+  showToast(`📱 Sending KES ${parseInt(amount).toLocaleString()} tip to Sauti Sol…`, 'success');
+  setTimeout(() => showToast('✅ Tip sent! Artist notified. 🎤', 'success'), 1800);
+}
+
+/* ═══ DASHBOARD ═══ */
+function renderDashboard() {
+  showDashPanel('overview');
+}
+
+function showDashPanel(panel) {
+  document.querySelectorAll('#view-dashboard .sidebar-link').forEach(l => l.classList.remove('active'));
+  const panels = {
+    overview: `
+      <div class="dash-header-row">
+        <div>
+          <div class="dash-greeting">Hey, Wanjiru. 👋</div>
+          <div class="dash-subtitle">You've attended 7 shows this year. Front row energy.</div>
+        </div>
+        <button class="btn btn-outline" onclick="showView('events')">Browse Events</button>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-label">Tickets Bought</div><div class="kpi-value">12</div><div class="kpi-change kpi-up">↑ 4 this month</div></div>
+        <div class="kpi-card" style="--accent:var(--terracotta);"><div class="kpi-label">Tips Sent</div><div class="kpi-value">KES 8,250</div><div class="kpi-change kpi-up">↑ Last: KES 1,000</div></div>
+        <div class="kpi-card"><div class="kpi-label">Digital Purchases</div><div class="kpi-value">7</div><div class="kpi-change kpi-up">↑ 2 new items</div></div>
+        <div class="kpi-card"><div class="kpi-label">Shows Attended</div><div class="kpi-value">7</div><div class="kpi-change kpi-up">↑ 100% attendance</div></div>
+      </div>
+      <div class="dash-two-col">
+        <div class="dash-card">
+          <div class="dash-card-title">Upcoming Tickets <span class="dash-card-tag">2 upcoming</span></div>
+          <div class="ticket-list-item"><div><div class="tli-event">Sauti Sol — Sawa Sawa</div><div class="tli-date">Sat 14 Jun · Kasarani, Nairobi</div></div><span class="tli-status status-upcoming">Upcoming</span></div>
+          <div class="ticket-list-item"><div><div class="tli-event">Nadia Mukami — Jua Kali</div><div class="tli-date">Fri 5 Jul · Virtual</div></div><span class="tli-status status-virtual">Virtual</span></div>
+          <div class="ticket-list-item" style="opacity:0.5;"><div><div class="tli-event">Burna Boy — Lagos</div><div class="tli-date">Sun 22 Jun · Lagos</div></div><span class="tli-status status-attended">Attended</span></div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">Recent Activity</div>
+          <div class="activity-item"><div class="activity-icon ai-ticket">🎫</div><div><div class="activity-text">Bought 1 ticket — Sauti Sol</div><div class="activity-sub">Front Row Presale · KES 5,000</div></div><div class="activity-time">2d ago</div></div>
+          <div class="activity-item"><div class="activity-icon ai-tip">💰</div><div><div class="activity-text">Tipped Nadia Mukami</div><div class="activity-sub">KES 1,000 via M-Pesa</div></div><div class="activity-time">5d ago</div></div>
+          <div class="activity-item"><div class="activity-icon ai-sale">📦</div><div><div class="activity-text">Purchased "Afrodisiac"</div><div class="activity-sub">Album · KES 500</div></div><div class="activity-time">1wk ago</div></div>
+          <div class="activity-item"><div class="activity-icon ai-ticket">🎫</div><div><div class="activity-text">Attended Burna Boy Lagos</div><div class="activity-sub">Floor ticket · Checked in</div></div><div class="activity-time">2wk ago</div></div>
+        </div>
+      </div>
+    `,
+    tickets: `
+      <div class="dash-header-row">
+        <div><div class="dash-greeting">My Tickets</div><div class="dash-subtitle">All your tickets, past and upcoming.</div></div>
+        <button class="btn btn-primary" onclick="showView('events')">+ Buy Tickets</button>
+      </div>
+      <div class="dash-card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Event</th><th>Date</th><th>Tier</th><th>Price</th><th>Status</th><th>QR</th></tr></thead>
+            <tbody>
+              <tr><td>Sauti Sol — Sawa Sawa</td><td>14 Jun 2025</td><td>Front Row</td><td>KES 5,000</td><td><span class="tli-status status-upcoming">Upcoming</span></td><td><button class="btn btn-ghost" style="font-size:9px;padding:4px 10px;" onclick="openTicketModal('Sauti Sol', 'Kasarani', '14 Jun', 1)">View QR</button></td></tr>
+              <tr><td>Nadia Mukami — Jua Kali</td><td>5 Jul 2025</td><td>Premium + Q&A</td><td>KES 1,500</td><td><span class="tli-status status-virtual">Virtual</span></td><td><button class="btn btn-ghost" style="font-size:9px;padding:4px 10px;">View QR</button></td></tr>
+              <tr style="opacity:0.6;"><td>Burna Boy — Lagos</td><td>22 Jun 2025</td><td>Floor</td><td>KES 4,500</td><td><span class="tli-status status-attended">Attended</span></td><td>—</td></tr>
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `,
+  };
+  document.getElementById('dash-main-content').innerHTML = panels[panel] || panels['overview'];
+}
+
+/* ═══ ADMIN ═══ */
+function renderAdmin() { showAdminPanel('overview'); }
+
+function showAdminPanel(panel) {
+  document.querySelectorAll('#view-admin .sidebar-link').forEach(l => l.classList.remove('active'));
+  const panels = {
+    overview: `
+      <div class="dash-header-row">
+        <div>
+          <div class="dash-greeting">Admin Dashboard</div>
+          <div class="dash-subtitle">Platform overview — today, ${new Date().toDateString()}</div>
+        </div>
+        <button class="btn btn-terracotta" onclick="showAdminPanel('events')">+ New Event</button>
+      </div>
+      <div class="kpi-grid">
+        <div class="kpi-card"><div class="kpi-label">Total Revenue</div><div class="kpi-value">KES 4.2M</div><div class="kpi-change kpi-up">↑ 22% MoM</div></div>
+        <div class="kpi-card"><div class="kpi-label">Tickets Sold</div><div class="kpi-value">18,420</div><div class="kpi-change kpi-up">↑ 1,240 this week</div></div>
+        <div class="kpi-card"><div class="kpi-label">Active Events</div><div class="kpi-value">24</div><div class="kpi-change kpi-up">↑ 6 new</div></div>
+        <div class="kpi-card"><div class="kpi-label">Artist Tips</div><div class="kpi-value">KES 842K</div><div class="kpi-change kpi-up">↑ 34% MoM</div></div>
+      </div>
+      <div class="dash-two-col">
+        <div class="dash-card">
+          <div class="dash-card-title">Top Events <span class="dash-card-tag">By Revenue</span></div>
+          <div class="table-wrap">
+            <table>
+              <thead><tr><th>Event</th><th>Sold</th><th>Revenue</th></tr></thead>
+              <tbody>
+                <tr><td>Sauti Sol — Sawa Sawa</td><td>4,200</td><td>KES 1.4M</td></tr>
+                <tr><td>Burna Boy — Lagos</td><td>3,800</td><td>KES 1.1M</td></tr>
+                <tr><td>Makossa Night</td><td>1,200</td><td>KES 280K</td></tr>
+              </tbody>
+            </table>
+          </div>
+        </div>
+        <div class="dash-card">
+          <div class="dash-card-title">Recent Transactions</div>
+          <div class="activity-item"><div class="activity-icon ai-ticket">🎫</div><div><div class="activity-text">Ticket purchase</div><div class="activity-sub">Sauti Sol · 2× Front Row · KES 10,000</div></div><div class="activity-time">4m ago</div></div>
+          <div class="activity-item"><div class="activity-icon ai-tip">💰</div><div><div class="activity-text">Tip payment</div><div class="activity-sub">Burna Boy · KES 5,000 via M-Pesa</div></div><div class="activity-time">12m ago</div></div>
+          <div class="activity-item"><div class="activity-icon ai-sale">📦</div><div><div class="activity-text">Digital product sale</div><div class="activity-sub">Afrodisiac album · KES 500</div></div><div class="activity-time">31m ago</div></div>
+        </div>
+      </div>
+    `,
+    events: `
+      <div class="dash-header-row">
+        <div><div class="dash-greeting">Manage Events</div><div class="dash-subtitle">Create, edit and monitor all events.</div></div>
+        <button class="btn btn-terracotta" onclick="showToast('Event creation form would open here!', 'success')">+ Create Event</button>
+      </div>
+      <div class="dash-card">
+        <div class="table-wrap">
+          <table>
+            <thead><tr><th>Event</th><th>Date</th><th>Venue</th><th>Type</th><th>Tickets Sold</th><th>Revenue</th><th>Status</th><th>Actions</th></tr></thead>
+            <tbody>
+              ${events.map(e => `
+              <tr>
+                <td><strong>${e.name}</strong><br><span style="font-size:11px;color:var(--ash);">${e.subtitle}</span></td>
+                <td>${e.date} ${e.month}</td>
+                <td>${e.venue}</td>
+                <td><span class="tli-status" style="background:${e.type==='virtual'?'rgba(27,122,110,0.2)':e.type==='festival'?'rgba(26,44,91,0.4)':'rgba(196,82,42,0.2)'};color:${e.type==='virtual'?'var(--ocean-teal)':e.type==='festival'?'var(--kente-gold)':'var(--terracotta)'};">${e.type}</span></td>
+                <td>${Math.floor(Math.random()*2000+500).toLocaleString()}</td>
+                <td>${e.from}</td>
+                <td><span class="tli-status status-upcoming">Live</span></td>
+                <td><button class="btn btn-ghost" style="font-size:9px;padding:4px 10px;" onclick="showToast('Edit panel for ${e.name} would open here', 'success')">Edit</button></td>
+              </tr>`).join('')}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    `,
+  };
+  document.getElementById('admin-main-content').innerHTML = panels[panel] || panels['overview'];
+}
+
+/* ═══ AUTH MODAL ═══ */
+function openAuthModal(type) {
+  const isLogin = type === 'login';
+  document.getElementById('auth-modal-content').innerHTML = `
+    <div class="auth-header">
+      <div class="auth-title">${isLogin ? 'Welcome back.' : 'Join FrontRow.'}</div>
+      <div class="auth-subtitle">${isLogin ? 'Your seat is waiting.' : 'Africa\'s front row, yours to claim.'}</div>
+    </div>
+    <div class="auth-body">
+      ${!isLogin ? `
+      <div class="form-group">
+        <label class="form-label">Full Name</label>
+        <input type="text" class="form-input" placeholder="Your name">
+      </div>` : ''}
+      <div class="form-group">
+        <label class="form-label">Email or Phone</label>
+        <input type="text" class="form-input" placeholder="${isLogin ? 'email or +254 7XX…' : 'you@example.com'}">
+      </div>
+      <div class="form-group">
+        <label class="form-label">Password</label>
+        <input type="password" class="form-input" placeholder="••••••••">
+      </div>
+      <button class="btn btn-primary" style="width:100%;justify-content:center;padding:13px;font-size:13px;margin-top:8px;" onclick="completeAuth('${type}')">${isLogin ? 'Sign In' : 'Create Account'}</button>
+      <div class="auth-divider"><span class="auth-divider-text">or</span></div>
+      <div class="auth-social-btns">
+        <button class="auth-social-btn" onclick="completeAuth('${type}')">📱 Continue with Phone</button>
+        <button class="auth-social-btn" onclick="completeAuth('${type}')">🌐 Google</button>
+      </div>
+    </div>
+    <div class="auth-footer">
+      ${isLogin ? 'No account? <a onclick="openAuthModal(\'register\')">Join free →</a>' : 'Already have an account? <a onclick="openAuthModal(\'login\')">Sign in →</a>'}
+    </div>
+    <button class="modal-close" style="top:16px;right:16px;" onclick="closeModal('auth-modal')">✕</button>
+  `;
+  document.getElementById('auth-modal').classList.add('open');
+}
+
+function completeAuth(type) {
+  closeModal('auth-modal');
+  showToast(type === 'login' ? '✅ Signed in! Welcome back.' : '🎉 Account created! Welcome to FrontRow Africa.', 'success');
+  showView('dashboard');
+}
+
+/* ═══ TOASTS ═══ */
+function showToast(msg, type = '') {
+  const container = document.getElementById('toast-container');
+  const toast = document.createElement('div');
+  toast.className = `toast ${type}`;
+  toast.innerHTML = msg;
+  container.appendChild(toast);
+  setTimeout(() => toast.remove(), 4000);
+}
+
+/* ═══ CLOSE MODALS ON OVERLAY CLICK ═══ */
+document.querySelectorAll('.modal-overlay').forEach(overlay => {
+  overlay.addEventListener('click', function(e) {
+    if (e.target === this) this.classList.remove('open');
+  });
+});
+
+/* ═══ INIT ═══ */
+document.addEventListener('DOMContentLoaded', () => {
+  renderHomeEvents();
+});
+
+// Initial render
+renderHomeEvents();
+</script>
+</body>
+</html>
