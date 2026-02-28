@@ -479,6 +479,7 @@ nav {
 .ec-type-live { background: var(--terracotta); color: var(--bone); }
 .ec-type-virtual { background: var(--ocean-teal); color: var(--bone); }
 .ec-type-festival { background: var(--adire-indigo); color: var(--kente-gold); }
+.ec-type-slam { background: var(--kente-gold); color: var(--inkblack); }
 
 .ec-date-block {
   position: absolute;
@@ -1392,6 +1393,11 @@ tr:hover td { background: rgba(232,160,32,0.03); }
 }
 
 /* Responsive helpers */
+/* Mobile-only elements — hidden by default, shown via @media */
+.mobile-nav-toggle { display: none; }
+.mobile-bottom-nav { display: none; }
+
+
 @media (max-width: 900px) {
   nav { padding: 0 20px; }
   .hero { grid-template-columns: 1fr; }
@@ -1408,6 +1414,173 @@ tr:hover td { background: rgba(232,160,32,0.03); }
   .tip-grid { grid-template-columns: 1fr; }
   .section-pad { padding: 60px 32px; }
   .footer-grid { grid-template-columns: 1fr 1fr; }
+  .services-grid { grid-template-columns: 1fr 1fr !important; }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — MOBILE (max 600px)
+═══════════════════════════════════════════ */
+@media (max-width: 600px) {
+  /* Nav */
+  nav {
+    padding: 0 16px;
+    height: 60px;
+  }
+  .nav-links { display: none; }
+  .nav-actions { gap: 8px; }
+  .nav-actions .btn { font-size: 11px; padding: 7px 12px; }
+  .nav-logo { font-size: 16px; }
+
+  /* Mobile nav toggle */
+  .mobile-nav-toggle {
+    display: flex !important;
+    align-items: center;
+    justify-content: center;
+    width: 36px;
+    height: 36px;
+    background: rgba(232,160,32,0.1);
+    border: 1px solid rgba(232,160,32,0.3);
+    border-radius: 6px;
+    cursor: pointer;
+    font-size: 18px;
+    color: var(--kente-gold);
+    margin-left: 8px;
+  }
+
+  /* Mobile nav drawer */
+  .mobile-nav-open .nav-links {
+    display: flex !important;
+    flex-direction: column;
+    position: fixed;
+    top: 60px;
+    left: 0;
+    right: 0;
+    background: var(--inkblack);
+    border-bottom: 2px solid var(--kente-gold);
+    padding: 20px 24px;
+    gap: 4px;
+    z-index: 999;
+  }
+  .mobile-nav-open .nav-links li { list-style: none; }
+  .mobile-nav-open .nav-links a {
+    display: block;
+    padding: 12px 0;
+    font-size: 16px;
+    border-bottom: 1px solid rgba(255,255,255,0.06);
+  }
+
+  /* Hero */
+  .hero-left {
+    padding: 80px 20px 48px;
+  }
+  .hero-title { font-size: clamp(32px, 10vw, 52px); }
+  .hero-sub { font-size: 14px; }
+  .hero-cta-row { flex-direction: column; gap: 10px; }
+  .hero-cta-row .btn { width: 100%; justify-content: center; text-align: center; }
+  .hero-stats { flex-wrap: wrap; gap: 16px; }
+  .hero-stats .stat-item { padding-left: 0 !important; min-width: 80px; }
+
+  /* Sections */
+  .section-pad { padding: 40px 20px; }
+  .section-title { font-size: 24px; }
+
+  /* Events grid */
+  .events-grid { grid-template-columns: 1fr !important; }
+  .event-card.featured { grid-column: span 1 !important; }
+  .filter-bar { flex-wrap: wrap; gap: 8px; }
+  .filter-chip { font-size: 11px; padding: 6px 12px; }
+
+  /* Store grid */
+  .store-grid { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+  .product-card .product-preview { height: 100px !important; font-size: 28px !important; }
+  .product-card h4 { font-size: 12px !important; }
+
+  /* KPI grid */
+  .kpi-grid { grid-template-columns: 1fr 1fr !important; gap: 12px !important; }
+  .kpi-card { padding: 16px !important; }
+  .kpi-val { font-size: 24px !important; }
+
+  /* Dashboard */
+  .dashboard-layout { grid-template-columns: 1fr; }
+  .dash-sidebar { display: none; }
+  .dash-main { padding: 16px; }
+
+  /* Mobile bottom nav */
+  .mobile-bottom-nav {
+    display: flex !important;
+    position: fixed;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    background: var(--inkblack);
+    border-top: 1px solid rgba(232,160,32,0.2);
+    z-index: 998;
+    padding: 8px 0 calc(8px + env(safe-area-inset-bottom));
+  }
+  .mobile-bottom-nav-item {
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 3px;
+    cursor: pointer;
+    padding: 4px 2px;
+    color: var(--ash);
+    font-size: 9px;
+    font-family: var(--font-body);
+    letter-spacing: 0.05em;
+    text-transform: uppercase;
+    transition: color 0.2s;
+  }
+  .mobile-bottom-nav-item.active { color: var(--kente-gold); }
+  .mobile-bottom-nav-item span:first-child { font-size: 20px; }
+
+  /* Add bottom padding so content isn't hidden behind bottom nav */
+  body { padding-bottom: 70px; }
+  
+  /* Footer */
+  .footer-grid { grid-template-columns: 1fr !important; gap: 32px !important; }
+
+  /* Modals */
+  .modal-box {
+    margin: 0 !important;
+    border-radius: 16px 16px 0 0 !important;
+    position: fixed !important;
+    bottom: 0 !important;
+    left: 0 !important;
+    right: 0 !important;
+    top: auto !important;
+    transform: none !important;
+    max-height: 90vh !important;
+    overflow-y: auto !important;
+    width: 100% !important;
+    max-width: 100% !important;
+  }
+  .modal-overlay { align-items: flex-end !important; }
+
+  /* Tip page */
+  .tip-grid { grid-template-columns: 1fr; }
+  .tip-amount-grid { grid-template-columns: repeat(3, 1fr) !important; gap: 8px !important; }
+  .tip-amount-btn { padding: 10px 6px !important; font-size: 13px !important; }
+
+  /* Services block */
+  .services-grid { grid-template-columns: 1fr !important; }
+
+  /* Section header row */
+  .section-header-row { flex-direction: column; align-items: flex-start !important; gap: 16px; }
+
+  /* Tables — horizontal scroll */
+  .admin-table-wrap { overflow-x: auto; }
+  .admin-table { min-width: 500px; }
+}
+
+/* ═══════════════════════════════════════════
+   RESPONSIVE — SMALL PHONES (max 380px)
+═══════════════════════════════════════════ */
+@media (max-width: 380px) {
+  .store-grid { grid-template-columns: 1fr !important; }
+  .kpi-grid { grid-template-columns: 1fr !important; }
+  .tip-amount-grid { grid-template-columns: repeat(2, 1fr) !important; }
 }
 </style>
 </head>
@@ -1436,6 +1609,7 @@ tr:hover td { background: rgba(232,160,32,0.03); }
   <div class="nav-actions">
     <button class="btn btn-ghost" onclick="openAuthModal('login')">Sign In</button>
     <button class="btn btn-primary" onclick="openAuthModal('register')">Join Free</button>
+    <button class="mobile-nav-toggle" onclick="toggleMobileNav()" id="mobile-nav-toggle">☰</button>
   </div>
 </nav>
 
@@ -1446,29 +1620,29 @@ tr:hover td { background: rgba(232,160,32,0.03); }
   <section class="hero">
     <div class="hero-pattern"></div>
     <div class="hero-left animate-in">
-      <div class="hero-eyebrow">Live Events · Digital Content · Artist Tipping</div>
+      <div class="hero-eyebrow">Poetry · Slam · Community · Music</div>
       <h1 class="hero-title">
         <span class="line-block">Your seat</span>
         <span class="line-block gold">at the front</span>
         <span class="line-block">of Africa.</span>
       </h1>
-      <p class="hero-sub">Tickets for live and virtual events across the continent. Tip your favourite artists. Own the music, the films, the books.</p>
+      <p class="hero-sub">Creative Spills presents Poetry Slam Africa — live showcases, school slams, intimate 100-seat nights, and the Grand Slam Festival. Jan 28–31, 2027, Nairobi.</p>
       <div class="hero-cta-row">
         <button class="btn btn-primary" style="font-size:13px;padding:12px 28px;" onclick="showView('events')">Browse Events</button>
-        <button class="btn btn-outline" style="font-size:13px;padding:12px 28px;" onclick="showView('store')">Explore Store</button>
+        <button class="btn btn-outline" style="font-size:13px;padding:12px 28px;" onclick="filterEvents(document.querySelector('[onclick*=\"festival\"]'), 'festival');showView('events')">Grand Slam 2027 →</button>
       </div>
       <div class="hero-stats">
         <div class="stat-item">
-          <div class="stat-num">240+</div>
-          <div class="stat-label">Live Events</div>
+          <div class="stat-num">27</div>
+          <div class="stat-label">Events in 2026–27</div>
         </div>
         <div class="stat-item" style="padding-left:24px;">
-          <div class="stat-num">18K</div>
-          <div class="stat-label">Tickets Sold</div>
+          <div class="stat-num">10</div>
+          <div class="stat-label">Monthly Shows</div>
         </div>
         <div class="stat-item" style="padding-left:24px;">
-          <div class="stat-num">KES 4.2M</div>
-          <div class="stat-label">Artist Tips</div>
+          <div class="stat-num">4 Days</div>
+          <div class="stat-label">Grand Slam Festival</div>
         </div>
       </div>
     </div>
@@ -1476,23 +1650,23 @@ tr:hover td { background: rgba(232,160,32,0.03); }
       <div class="featured-card">
         <div class="fc-image">
           <div class="fc-image-pattern"></div>
-          <span class="fc-badge"><span class="fc-live-dot"></span>On Sale Now</span>
+          <span class="fc-badge"><span class="fc-live-dot"></span>Save the Date</span>
         </div>
         <div class="fc-body">
-          <div class="fc-event-name">Sawa Sawa Festival 2025</div>
-          <div class="fc-artist">Sauti Sol</div>
+          <div class="fc-event-name">Poetry Slam Africa Festival 2027</div>
+          <div class="fc-artist">Grand Slam Championship · Jan 28–31</div>
           <div class="fc-meta">
-            <div class="fc-meta-item"><span class="fc-meta-icon">📍</span>Kasarani, Nairobi</div>
-            <div class="fc-meta-item"><span class="fc-meta-icon">📅</span>Sat, 14 Jun</div>
+            <div class="fc-meta-item"><span class="fc-meta-icon">📍</span>Grand Venue, Nairobi</div>
+            <div class="fc-meta-item"><span class="fc-meta-icon">📅</span>Thu–Sun, 28–31 Jan 2027</div>
           </div>
           <div class="fc-tiers">
-            <div class="fc-tier sold-out">Early Bird — KES 3,500</div>
-            <div class="fc-tier available">Front Row — KES 5,000</div>
-            <div class="fc-tier available">General — KES 3,000</div>
+            <div class="fc-tier available">4-Day Festival Pass — KES 6,000</div>
+            <div class="fc-tier available">VIP Festival Pass — KES 12,000</div>
+            <div class="fc-tier available">Grand Slam Day Ticket — KES 2,500</div>
           </div>
           <div class="fc-actions">
-            <button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="openTicketModal('Sauti Sol — Sawa Sawa Festival', 'Kasarani Stadium, Nairobi', 'Sat 14 Jun 2025')">Get Tickets</button>
-            <button class="btn btn-ghost" onclick="showView('tip')">Tip Artist 🎤</button>
+            <button class="btn btn-primary" style="flex:1;justify-content:center;" onclick="openTicketModal('Grand Slam Championship — Poetry Slam Africa Festival 2027', 'Grand Venue, Nairobi', '31 Jan 2027', 27)">Get Festival Tickets</button>
+            <button class="btn btn-ghost" onclick="showView('tip')">Tip Poets 🎤</button>
           </div>
         </div>
       </div>
@@ -1501,10 +1675,10 @@ tr:hover td { background: rgba(232,160,32,0.03); }
 
   <!-- Featured events strip -->
   <section class="section-pad" style="background:rgba(26,44,91,0.12);">
-    <div class="section-eyebrow">This Week</div>
-    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:40px;">
-      <h2 class="section-title">Happening Now</h2>
-      <button class="btn btn-outline" onclick="showView('events')">All Events →</button>
+    <div class="section-eyebrow">Creative Spills 2026–27</div>
+    <div style="display:flex;justify-content:space-between;align-items:flex-end;margin-bottom:40px;" class="section-header-row">
+      <h2 class="section-title">Upcoming Events</h2>
+      <button class="btn btn-outline" onclick="showView('events')">All 27 Events →</button>
     </div>
     <div class="events-grid">
       <!-- Event cards generated by JS -->
@@ -1575,7 +1749,7 @@ tr:hover td { background: rgba(232,160,32,0.03); }
       </div>
     </div>
     <div class="footer-bottom">
-      <span>© 2025 FrontRow Africa. All rights reserved.</span>
+      <span>© 2026 FrontRow Africa · Creative Spills. All rights reserved.</span>
       <span>frontrow.africa · Nairobi · Lagos · Accra</span>
     </div>
   </footer>
@@ -1587,7 +1761,7 @@ tr:hover td { background: rgba(232,160,32,0.03); }
     <div class="section-eyebrow">All Events</div>
     <div class="events-header">
       <div>
-        <h2 class="section-title">Live & Virtual<br>Events</h2>
+        <h2 class="section-title">Poetry Slam Africa<br>Full Calendar</h2>
       </div>
       <div style="display:flex;gap:8px;align-items:center;">
         <input type="text" placeholder="Search events, artists, venues…" style="background:rgba(242,237,228,0.05);border:1px solid rgba(155,149,137,0.3);color:var(--bone);font-family:var(--font-body);font-size:14px;padding:10px 16px;outline:none;border-radius:2px;width:280px;" onfocus="this.style.borderColor='rgba(232,160,32,0.5)'" onblur="this.style.borderColor='rgba(155,149,137,0.3)'">
@@ -1601,13 +1775,12 @@ tr:hover td { background: rgba(232,160,32,0.03); }
       </div>
     </div>
     <div class="filter-bar" id="events-filter-bar">
-      <button class="filter-chip active" onclick="filterEvents(this, 'all')">All</button>
-      <button class="filter-chip" onclick="filterEvents(this, 'live')">Live Events</button>
-      <button class="filter-chip" onclick="filterEvents(this, 'virtual')">Virtual</button>
-      <button class="filter-chip" onclick="filterEvents(this, 'festival')">Festivals</button>
-      <button class="filter-chip" onclick="filterEvents(this, 'afrobeats')">Afrobeats</button>
-      <button class="filter-chip" onclick="filterEvents(this, 'gospel')">Gospel</button>
-      <button class="filter-chip" onclick="filterEvents(this, 'jazz')">Jazz</button>
+      <button class="filter-chip active" onclick="filterEvents(this, 'all')">All Events</button>
+      <button class="filter-chip" onclick="filterEvents(this, 'slam')">🏆 Slam Competitions</button>
+      <button class="filter-chip" onclick="filterEvents(this, 'live')">🎤 Showcases</button>
+      <button class="filter-chip" onclick="filterEvents(this, 'festival')">🎪 Festival 2027</button>
+      <button class="filter-chip" onclick="filterEvents(this, 'schools')">🎓 Schools Slam</button>
+      <button class="filter-chip" onclick="filterEvents(this, 'funnies')">🎭 10 for 100</button>
     </div>
     <div class="events-grid" id="all-events-grid"></div>
   </div>
@@ -1644,19 +1817,19 @@ tr:hover td { background: rgba(232,160,32,0.03); }
           <p style="font-size:16px;color:rgba(242,237,228,0.7);margin-bottom:40px;font-style:italic;line-height:1.6;">Tip directly to the artist. No middleman. No cut (except payment fees). The fastest way to say "this show changed me."</p>
 
           <div class="artist-card" id="tip-artist-card">
-            <div class="artist-avatar">🎤</div>
+            <div class="artist-avatar">✊</div>
             <div>
-              <div class="artist-name">Sauti Sol</div>
-              <div class="artist-genre">Afrobeats · Nairobi</div>
+              <div class="artist-name">Rudy Francisco</div>
+              <div class="artist-genre">Spoken Word · Poetry Slam Africa</div>
             </div>
             <div class="artist-tip-total">
-              <div class="tip-total-num">KES 128,400</div>
+              <div class="tip-total-num">KES 84,200</div>
               <div class="tip-total-label">Total tips today</div>
             </div>
           </div>
 
           <div class="section-eyebrow" style="margin-bottom:16px;">Choose Amount</div>
-          <div class="tip-amounts" id="tip-amounts">
+          <div class="tip-amounts tip-amount-grid" id="tip-amounts">
             <button class="tip-amount-btn" onclick="selectTip(this, 100)">100</button>
             <button class="tip-amount-btn" onclick="selectTip(this, 250)">250</button>
             <button class="tip-amount-btn" onclick="selectTip(this, 500)">500</button>
@@ -1738,7 +1911,7 @@ tr:hover td { background: rgba(232,160,32,0.03); }
 <div class="view" id="view-admin">
   <div class="admin-topbar">
     ⚡ Admin Panel — FrontRow Africa
-    <span style="color:var(--ash);margin-left:4px;">· Logged in as admin@frontrow.africa</span>
+    <span style="color:var(--ash);margin-left:4px;">· Logged in as <a href="/cdn-cgi/l/email-protection" class="__cf_email__" data-cfemail="dbbabfb6b2b59bbda9b4b5afa9b4acf5babda9b2b8ba">[email&#160;protected]</a></span>
   </div>
   <div class="admin-content">
     <aside class="dash-sidebar">
@@ -1771,34 +1944,59 @@ tr:hover td { background: rgba(232,160,32,0.03); }
 <!-- TOASTS -->
 <div class="toast-container" id="toast-container"></div>
 
-<script>
+<script data-cfasync="false" src="/cdn-cgi/scripts/5c5dd728/cloudflare-static/email-decode.min.js"></script><script>
 /* ═══ DATA ═══ */
 const events = [
-  { id: 1, name: 'Sauti Sol', subtitle: 'Sawa Sawa Festival', venue: 'Kasarani Stadium', city: 'Nairobi', date: '14', month: 'Jun', type: 'festival', emoji: '🎤', featured: true, from: 'KES 3,000', desc: "One night. Kasarani. This is the show you'll tell people you were at.", tiers: [{name:'Front Row Presale',price:5000,avail:'low'},{name:'General Advance',price:3000,avail:'good'},{name:'VIP Table',price:15000,avail:'good'}] },
-  { id: 2, name: 'Burna Boy', subtitle: 'African Giant Tour', venue: 'Eko Convention', city: 'Lagos', date: '22', month: 'Jun', type: 'live', emoji: '🔥', from: 'KES 4,500', desc: 'African Giant. Lagos. June 22nd. History.', tiers: [{name:'Floor',price:4500,avail:'good'},{name:'VIP',price:12000,avail:'low'}] },
-  { id: 3, name: 'Stonebwoy', subtitle: 'Anloga Junction Live', venue: 'Accra Sports Stadium', city: 'Accra', date: '28', month: 'Jun', type: 'live', emoji: '🎵', from: 'GHS 120', desc: 'Reggae-dancehall at its most powerful. Accra, ready?', tiers: [{name:'General',price:120,avail:'good',currency:'GHS'},{name:'VIP',price:350,avail:'good',currency:'GHS'}] },
-  { id: 4, name: 'Nadia Mukami', subtitle: 'Jua Kali Sessions', venue: 'Virtual · YouTube Live', city: 'Nairobi', date: '5', month: 'Jul', type: 'virtual', emoji: '🌟', from: 'KES 500', desc: 'Intimate acoustic session. Stream from anywhere in Africa.', tiers: [{name:'Stream Access',price:500,avail:'good'},{name:'Premium + Q&A',price:1500,avail:'good'}] },
-  { id: 5, name: 'Focalistic', subtitle: 'Ke Star SA Tour', venue: 'Sun Arena', city: 'Pretoria', date: '12', month: 'Jul', type: 'live', emoji: '🎸', from: 'ZAR 350', desc: 'Amapiano royalty. Sun Arena. This summer.', tiers: [{name:'Floor',price:350,avail:'good',currency:'ZAR'}] },
-  { id: 6, name: 'Makossa Night', subtitle: 'Jazz & Soul Festival', venue: 'Alliance Française', city: 'Nairobi', date: '19', month: 'Jul', type: 'festival', emoji: '🎷', from: 'KES 2,000', desc: 'Five acts. One extraordinary night of jazz, makossa and soul.', tiers: [{name:'Early Bird',price:2000,avail:'good'},{name:'Standard',price:2800,avail:'good'}] },
+  /* ── SUMN FOR THE FUNNIES (10 for 100 Monthly Series) ── */
+  { id: 1, name: 'Sumn for the Funnies #1', subtitle: '10 for 100 Series', venue: 'Suave Kitchen & Social Club', city: 'Nairobi', date: '14', month: 'Feb', year: '2026', type: 'live', emoji: '🎭', featured: false, from: 'KES 500', desc: 'Valentine\'s edition. 6 poets, 2 comedians, 1 wildcard. 100 seats. Audience roast included. Open mic closer.', tiers: [{name:'General Entry',price:500,avail:'good'},{name:'Front Row',price:1000,avail:'good'}] },
+  { id: 2, name: 'Sumn for the Funnies #2', subtitle: '10 for 100 Series', venue: 'Suave Kitchen & Social Club', city: 'Nairobi', date: '14', month: 'Mar', year: '2026', type: 'live', emoji: '🎭', from: 'KES 500', desc: 'Intimate poetry & comedy. 100 seats, 6 poets, 2 comedians, 1 wildcard. Audience roast + open mic.', tiers: [{name:'General Entry',price:500,avail:'good'},{name:'Front Row',price:1000,avail:'good'}] },
+  /* ── HEADLINE SHOWCASES ── */
+  { id: 3, name: 'Mufasa & Alysia Harris', subtitle: 'Showcase 1 — Legacy & Lineage', venue: 'Nairobi Creative Hub', city: 'Nairobi', date: '21', month: 'Mar', year: '2026', type: 'live', emoji: '🎤', featured: true, from: 'KES 1,500', desc: 'Legacy & Lineage. 30 min local feature, then Mufasa & Alysia Harris headline. Post-show Q&A. 250–400 pax + livestream.', tiers: [{name:'Early Bird',price:1500,avail:'good'},{name:'Standard',price:2000,avail:'good'},{name:'VIP Front Row',price:4000,avail:'good'},{name:'Livestream',price:400,avail:'good'}] },
+  { id: 4, name: 'Sumn for the Funnies #3', subtitle: '10 for 100 Series', venue: 'Suave Kitchen & Social Club', city: 'Nairobi', date: '9', month: 'May', year: '2026', type: 'live', emoji: '🎭', from: 'KES 500', desc: 'May edition. Intimate 100-seat comedy & poetry night. Wildcard performer + audience roast.', tiers: [{name:'General Entry',price:500,avail:'good'},{name:'Front Row',price:1000,avail:'good'}] },
+  /* ── OFFICIAL SLAM PRELIMS ── */
+  { id: 5, name: 'Official Slam Prelim 1', subtitle: 'Poetry Slam Africa 2026', venue: 'Suave Kitchen & Social Club', city: 'Nairobi', date: '5', month: 'Apr', year: '2026', type: 'slam', emoji: '🏆', featured: true, from: 'KES 800', desc: '9–12 poets. Top 3 advance to Grand Slam. Wildcard by cumulative score. 3 rotating judges + audience vote. Feature poet included.', tiers: [{name:'General',price:800,avail:'good'},{name:'VIP Reserved',price:1800,avail:'good'},{name:'Livestream',price:300,avail:'good'}] },
+  { id: 6, name: 'Nairobi Region Heat', subtitle: 'Rising Voices Schools Slam 2026', venue: 'TBD · Nairobi', city: 'Nairobi', date: '16', month: 'May', year: '2026', type: 'slam', emoji: '🎓', from: 'KES 300', desc: '8–12 schools. 2 reps per school. Top 2 advance to National Semi-Final. Future stars on the stage today.', tiers: [{name:'Supporter Entry',price:300,avail:'good'},{name:'Schools Delegate',price:0,avail:'good'}] },
+  { id: 7, name: 'Sumn for the Funnies #4', subtitle: '10 for 100 Series', venue: 'Suave Kitchen & Social Club', city: 'Nairobi', date: '13', month: 'Jun', year: '2026', type: 'live', emoji: '🎭', from: 'KES 500', desc: 'June edition. 6 poets, 2 comedians, 1 wildcard. The room is always electric. 100 seats only.', tiers: [{name:'General Entry',price:500,avail:'good'},{name:'Front Row',price:1000,avail:'good'}] },
+  { id: 8, name: 'Maina Mind & Havfy', subtitle: 'Showcase 2 — Diaspora & Identity', venue: 'Nairobi Creative Hub', city: 'Nairobi', date: '27', month: 'Jun', year: '2026', type: 'live', emoji: '🌍', from: 'KES 1,500', desc: 'Diaspora & Identity. Where do you come from? Where are you going? Maina Mind & Havfy answer through verse.', tiers: [{name:'Early Bird',price:1500,avail:'good'},{name:'Standard',price:2000,avail:'good'},{name:'VIP Front Row',price:4000,avail:'good'},{name:'Livestream',price:400,avail:'good'}] },
+  { id: 9, name: 'Coast Region Heat', subtitle: 'Rising Voices Schools Slam 2026', venue: 'TBD · Mombasa', city: 'Mombasa', date: '6', month: 'Jun', year: '2026', type: 'slam', emoji: '🎓', from: 'KES 300', desc: 'Coast schools compete. 2 representatives per school. Top 2 advance to Nairobi for the National Semi-Final.', tiers: [{name:'Supporter Entry',price:300,avail:'good'},{name:'Schools Delegate',price:0,avail:'good'}] },
+  { id: 10, name: 'Western Region Heat', subtitle: 'Rising Voices Schools Slam 2026', venue: 'TBD · Kisumu', city: 'Kisumu', date: '20', month: 'Jun', year: '2026', type: 'slam', emoji: '🎓', from: 'KES 300', desc: 'Western Kenya schools on the mic. Top 2 advance nationally. Watch future voices emerge.', tiers: [{name:'Supporter Entry',price:300,avail:'good'},{name:'Schools Delegate',price:0,avail:'good'}] },
+  { id: 11, name: 'Rift Valley Region Heat', subtitle: 'Rising Voices Schools Slam 2026', venue: 'TBD · Nakuru', city: 'Nakuru', date: '4', month: 'Jul', year: '2026', type: 'slam', emoji: '🎓', from: 'KES 300', desc: 'Rift Valley schools in the arena. 2 reps per school, top 2 advance. Poetry from the valley.', tiers: [{name:'Supporter Entry',price:300,avail:'good'},{name:'Schools Delegate',price:0,avail:'good'}] },
+  { id: 12, name: 'Sumn for the Funnies #5', subtitle: '10 for 100 Series', venue: 'Suave Kitchen & Social Club', city: 'Nairobi', date: '11', month: 'Jul', year: '2026', type: 'live', emoji: '🎭', from: 'KES 500', desc: 'Mid-year edition. Intimate 100-seat comedy & poetry. Always a wildcard. Always an audience roast.', tiers: [{name:'General Entry',price:500,avail:'good'},{name:'Front Row',price:1000,avail:'good'}] },
+  { id: 13, name: 'Central/Eastern Region Heat', subtitle: 'Rising Voices Schools Slam 2026', venue: 'TBD · Nyeri', city: 'Nyeri', date: '18', month: 'Jul', year: '2026', type: 'slam', emoji: '🎓', from: 'KES 300', desc: 'Central & Eastern Kenya schools clash. Top 2 qualify for the National Semi-Final in Nairobi.', tiers: [{name:'Supporter Entry',price:300,avail:'good'},{name:'Schools Delegate',price:0,avail:'good'}] },
+  { id: 14, name: 'Official Slam Prelim 2', subtitle: 'Poetry Slam Africa 2026', venue: 'Suave Kitchen & Social Club', city: 'Nairobi', date: '2', month: 'Aug', year: '2026', type: 'slam', emoji: '🏆', from: 'KES 800', desc: '9–12 poets compete for a Grand Slam spot. Top 3 advance. Wildcard allocation. Rotating judges + audience vote.', tiers: [{name:'General',price:800,avail:'good'},{name:'VIP Reserved',price:1800,avail:'good'},{name:'Livestream',price:300,avail:'good'}] },
+  { id: 15, name: 'Sumn for the Funnies #6', subtitle: '10 for 100 Series', venue: 'Suave Kitchen & Social Club', city: 'Nairobi', date: '8', month: 'Aug', year: '2026', type: 'live', emoji: '🎭', from: 'KES 500', desc: 'August edition. 6 poets, 2 comedians, 1 wildcard in 100 seats. Audience always runs the roast.', tiers: [{name:'General Entry',price:500,avail:'good'},{name:'Front Row',price:1000,avail:'good'}] },
+  { id: 16, name: 'Rudy Francisco & Gufy', subtitle: 'Showcase 3 — Love, Language & Revolution', venue: 'Nairobi Creative Hub', city: 'Nairobi', date: '19', month: 'Sep', year: '2026', type: 'live', emoji: '❤️', featured: true, from: 'KES 1,500', desc: 'Love, Language & Revolution. Rudy Francisco — one of the most-watched spoken word poets alive — headlines Nairobi.', tiers: [{name:'Early Bird',price:1500,avail:'low'},{name:'Standard',price:2000,avail:'good'},{name:'VIP Front Row',price:4000,avail:'good'},{name:'Livestream',price:400,avail:'good'}] },
+  { id: 17, name: 'Sumn for the Funnies #7', subtitle: '10 for 100 Series', venue: 'Suave Kitchen & Social Club', city: 'Nairobi', date: '12', month: 'Sep', year: '2026', type: 'live', emoji: '🎭', from: 'KES 500', desc: 'September edition. 100 seats, 6 poets, 2 comedians. Come. Laugh. Cry. Roast someone.', tiers: [{name:'General Entry',price:500,avail:'good'},{name:'Front Row',price:1000,avail:'good'}] },
+  { id: 18, name: 'Official Slam Prelim 3', subtitle: 'Poetry Slam Africa 2026', venue: 'Suave Kitchen & Social Club', city: 'Nairobi', date: '4', month: 'Oct', year: '2026', type: 'slam', emoji: '🏆', from: 'KES 800', desc: 'Final preliminary round. The last door to the Grand Slam. 9–12 poets, top 3 advance. No second chances.', tiers: [{name:'General',price:800,avail:'good'},{name:'VIP Reserved',price:1800,avail:'good'},{name:'Livestream',price:300,avail:'good'}] },
+  { id: 19, name: 'Sumn for the Funnies #8', subtitle: '10 for 100 Series', venue: 'Suave Kitchen & Social Club', city: 'Nairobi', date: '10', month: 'Oct', year: '2026', type: 'live', emoji: '🎭', from: 'KES 500', desc: 'October edition. 100 seats only. 6 poets + 2 comedians + 1 wildcard. Always a surprise.', tiers: [{name:'General Entry',price:500,avail:'good'},{name:'Front Row',price:1000,avail:'good'}] },
+  { id: 20, name: 'National Schools Semi-Final', subtitle: 'Rising Voices Schools Slam 2026', venue: 'Nairobi Creative Hub', city: 'Nairobi', date: '14', month: 'Nov', year: '2026', type: 'slam', emoji: '🎓', featured: true, from: 'KES 500', desc: '10–12 regional finalists. One stage. Top 5 qualify for the National Schools Championship at the 2027 Festival.', tiers: [{name:'General',price:500,avail:'good'},{name:'VIP Reserved',price:1200,avail:'good'},{name:'Livestream',price:200,avail:'good'}] },
+  { id: 21, name: 'Sumn for the Funnies #9', subtitle: '10 for 100 Series', venue: 'Suave Kitchen & Social Club', city: 'Nairobi', date: '7', month: 'Nov', year: '2026', type: 'live', emoji: '🎭', from: 'KES 500', desc: 'November edition. 100 seats, maximum energy. 6 poets, 2 comedians, 1 wildcard. Audience roast finale.', tiers: [{name:'General Entry',price:500,avail:'good'},{name:'Front Row',price:1000,avail:'good'}] },
+  { id: 22, name: 'Abu Sense & Saul Williams', subtitle: 'Showcase 4 — Radical Imagination', venue: 'Nairobi Creative Hub', city: 'Nairobi', date: '5', month: 'Dec', year: '2026', type: 'live', emoji: '✊', featured: true, from: 'KES 1,500', desc: 'Radical Imagination. Saul Williams — global icon of spoken word & music — closes the year in Nairobi. Be there.', tiers: [{name:'Early Bird',price:1500,avail:'low'},{name:'Standard',price:2000,avail:'good'},{name:'VIP Front Row',price:4000,avail:'good'},{name:'Livestream',price:400,avail:'good'}] },
+  { id: 23, name: 'Sumn for the Funnies #10', subtitle: '10 for 100 Series', venue: 'Suave Kitchen & Social Club', city: 'Nairobi', date: '12', month: 'Dec', year: '2026', type: 'live', emoji: '🎭', from: 'KES 500', desc: 'Season finale. Show #10. The last laugh of 2026. 100 seats. You know what to expect.', tiers: [{name:'General Entry',price:500,avail:'good'},{name:'Front Row',price:1000,avail:'good'}] },
+  /* ── POETRY SLAM AFRICA FESTIVAL 2027 ── */
+  { id: 24, name: 'PSA Festival — Day 1', subtitle: 'Community & Legacy Night', venue: 'TBD · Grand Venue', city: 'Nairobi', date: '28', month: 'Jan', year: '2027', type: 'festival', emoji: '🔥', featured: true, from: 'KES 2,000', desc: 'Wednesday, Jan 28. Community & Legacy Night. The journey continues with an even bigger experience. More creativity, more moments, more connection.', tiers: [{name:'Community Pass',price:2000,avail:'good'},{name:'Festival Pass (4 Days)',price:6000,avail:'good'},{name:'VIP Festival Pass',price:12000,avail:'good'}] },
+  { id: 25, name: 'PSA Festival — Day 2', subtitle: 'Schools National Final + Concert', venue: 'TBD · Grand Venue', city: 'Nairobi', date: '29', month: 'Jan', year: '2027', type: 'festival', emoji: '🎓', featured: true, from: 'KES 2,000', desc: 'Thursday, Jan 29. National Schools Championship — winner receives trophy, mentorship year & 2028 performance slot. Then: concert.', tiers: [{name:'Day Pass',price:2000,avail:'good'},{name:'Festival Pass (4 Days)',price:6000,avail:'good'},{name:'VIP Festival Pass',price:12000,avail:'good'}] },
+  { id: 26, name: 'PSA Festival — Day 3', subtitle: 'Workshops + Panels + Regional Showcase', venue: 'TBD · Grand Venue', city: 'Nairobi', date: '30', month: 'Jan', year: '2027', type: 'festival', emoji: '🎤', from: 'KES 2,000', desc: 'Friday, Jan 30. Workshops, panels, and a full regional showcase. Expand your craft with the continent\'s best voices.', tiers: [{name:'Day Pass',price:2000,avail:'good'},{name:'Festival Pass (4 Days)',price:6000,avail:'good'},{name:'VIP Festival Pass',price:12000,avail:'good'}] },
+  { id: 27, name: 'Grand Slam Championship', subtitle: 'Poetry Slam Africa Festival 2027', venue: 'TBD · Grand Venue', city: 'Nairobi', date: '31', month: 'Jan', year: '2027', type: 'festival', emoji: '👑', featured: true, from: 'KES 2,500', desc: 'Saturday, Jan 31. The one. All prelim finalists. One champion. The stage that defines what\'s coming. Don\'t miss out.', tiers: [{name:'Grand Slam Ticket',price:2500,avail:'good'},{name:'Festival Pass (4 Days)',price:6000,avail:'good'},{name:'VIP Grand Slam',price:8000,avail:'low'},{name:'Livestream',price:500,avail:'good'}] },
 ];
 
 const products = [
-  { name: 'Afrodisiac', artist: 'Sauti Sol', type: 'album', emoji: '🎵', price: 'KES 500', bg: 'linear-gradient(135deg, #E8A020, #C4522A)' },
-  { name: 'Odogwu Diaries', artist: 'Burna Boy', type: 'ebook', emoji: '📖', price: 'KES 350', bg: 'linear-gradient(135deg, #1A2C5B, #0A0A08)' },
-  { name: 'Kasarani Live', artist: 'Sauti Sol', type: 'video', emoji: '🎬', price: 'KES 800', bg: 'linear-gradient(135deg, #2D5016, #1B7A6E)' },
-  { name: 'Melanin & Gold', artist: 'Nadia Mukami', type: 'album', emoji: '🎤', price: 'KES 450', bg: 'linear-gradient(135deg, #D43F1A, #E8A020)' },
-  { name: 'Amapiano Bible', artist: 'Focalistic', type: 'ebook', emoji: '📚', price: 'KES 600', bg: 'linear-gradient(135deg, #9B9589, #1A2C5B)' },
-  { name: 'Anloga Raw', artist: 'Stonebwoy', type: 'video', emoji: '🎥', price: 'GHS 45', bg: 'linear-gradient(135deg, #1B7A6E, #2D5016)' },
-  { name: 'West Africa Now', artist: 'Various Artists', type: 'album', emoji: '🌍', price: 'KES 300', bg: 'linear-gradient(135deg, #C4522A, #1A2C5B)' },
-  { name: 'Sound Architect', artist: 'Ebo Taylor', type: 'ebook', emoji: '🎼', price: 'GHS 30', bg: 'linear-gradient(135deg, #E8A020, #2D5016)' },
+  { name: 'Legacy & Lineage — Live', artist: 'Mufasa & Alysia Harris', type: 'video', emoji: '🎬', price: 'KES 600', bg: 'linear-gradient(135deg, #E8A020, #C4522A)' },
+  { name: 'Diaspora Sessions Vol.1', artist: 'Maina Mind', type: 'album', emoji: '🎵', price: 'KES 450', bg: 'linear-gradient(135deg, #1A2C5B, #0A0A08)' },
+  { name: 'Grief & Other Graces', artist: 'Rudy Francisco', type: 'ebook', emoji: '📖', price: 'KES 380', bg: 'linear-gradient(135deg, #2D5016, #1B7A6E)' },
+  { name: 'Radical Imagination — Live', artist: 'Saul Williams', type: 'video', emoji: '🎥', price: 'KES 900', bg: 'linear-gradient(135deg, #9B9589, #1A2C5B)' },
+  { name: 'Sumn for the Funnies: Best Of', artist: 'Various Poets', type: 'video', emoji: '🎭', price: 'KES 350', bg: 'linear-gradient(135deg, #D43F1A, #E8A020)' },
+  { name: 'The Craft of Slam', artist: 'Abu Sense', type: 'ebook', emoji: '📚', price: 'KES 500', bg: 'linear-gradient(135deg, #C4522A, #1A2C5B)' },
+  { name: 'Havfy: Homeland', artist: 'Havfy', type: 'album', emoji: '🎤', price: 'KES 420', bg: 'linear-gradient(135deg, #1B7A6E, #2D5016)' },
+  { name: 'PSA 2026 Full Prelim Series', artist: 'Poetry Slam Africa', type: 'video', emoji: '🏆', price: 'KES 1,200', bg: 'linear-gradient(135deg, #E8A020, #2D5016)' },
 ];
 
 const tips = [
-  { from: 'Wanjiku N.', msg: 'That last set was everything 🔥', amount: 'KES 1,000', time: '2m ago' },
-  { from: 'Kofi A.', msg: 'Real African sound, keep going!', amount: 'KES 2,500', time: '7m ago' },
+  { from: 'Wanjiku N.', msg: 'Rudy Francisco changed how I see everything 🔥', amount: 'KES 1,000', time: '2m ago' },
+  { from: 'Kofi A.', msg: 'Saul Williams is a force. Radical Imagination indeed.', amount: 'KES 2,500', time: '7m ago' },
   { from: 'Anonymous', msg: '', amount: 'KES 500', time: '12m ago' },
-  { from: 'Amara D.', msg: 'Lagos to Nairobi — we feel you', amount: 'KES 5,000', time: '18m ago' },
-  { from: 'Seun B.', msg: '"Melanin & Gold" still in rotation', amount: 'KES 250', time: '25m ago' },
+  { from: 'Amara D.', msg: 'Mufasa & Alysia was the show of the year', amount: 'KES 5,000', time: '18m ago' },
+  { from: 'Seun B.', msg: '"10 for 100" every month — never miss it', amount: 'KES 250', time: '25m ago' },
 ];
 
 const topTippers = [
@@ -1830,11 +2028,11 @@ function renderEventCards(containerId, items) {
   const container = document.getElementById(containerId);
   if (!container) return;
   container.innerHTML = items.map((e, i) => `
-    <div class="event-card ${e.featured ? 'featured' : ''}" onclick="openTicketModal('${e.name} — ${e.subtitle}', '${e.venue}, ${e.city}', '${e.date} ${e.month} 2025', ${e.id})">
+    <div class="event-card ${e.featured ? 'featured' : ''}" onclick="openTicketModal('${e.name} — ${e.subtitle}', '${e.venue}, ${e.city}', '${e.date} ${e.month} ${e.year||2026}', ${e.id})">
       <div class="ec-thumb">
         <div class="ec-thumb-bg" style="background:${e.featured ? 'linear-gradient(135deg, var(--terracotta), var(--adire-indigo))' : 'linear-gradient(135deg, rgba(26,44,91,0.8), rgba(10,10,8,1))'}">${e.emoji}</div>
         <div class="ec-thumb-overlay"></div>
-        <div class="ec-type-badge ec-type-${e.type}">${e.type === 'virtual' ? '⚡ Virtual' : e.type === 'festival' ? '🎪 Festival' : '📍 Live'}</div>
+        <div class="ec-type-badge ec-type-${e.type}">${e.type === 'virtual' ? '⚡ Virtual' : e.type === 'festival' ? '🎪 Festival' : e.type === 'slam' ? '🏆 Slam' : '🎤 Live'}</div>
         <div class="ec-date-block">
           <div class="ec-date-day">${e.date}</div>
           <div class="ec-date-mon">${e.month}</div>
@@ -1846,7 +2044,7 @@ function renderEventCards(containerId, items) {
         <div class="ec-desc">${e.desc}</div>
         <div class="ec-footer">
           <div class="ec-price">From ${e.from}<span>Per ticket</span></div>
-          <button class="btn btn-primary" style="font-size:10px;padding:7px 14px;" onclick="event.stopPropagation();openTicketModal('${e.name} — ${e.subtitle}', '${e.venue}, ${e.city}', '${e.date} ${e.month} 2025', ${e.id})">Get Tickets</button>
+          <button class="btn btn-primary" style="font-size:10px;padding:7px 14px;" onclick="event.stopPropagation();openTicketModal('${e.name} — ${e.subtitle}', '${e.venue}, ${e.city}', '${e.date} ${e.month} ${e.year||2026}', ${e.id})">Get Tickets</button>
         </div>
       </div>
     </div>
@@ -1870,7 +2068,11 @@ function renderAllEvents() {
 function filterEvents(btn, type) {
   document.querySelectorAll('#events-filter-bar .filter-chip').forEach(c => c.classList.remove('active'));
   btn.classList.add('active');
-  const filtered = type === 'all' ? events : events.filter(e => e.type === type || e.subtitle.toLowerCase().includes(type));
+  let filtered;
+  if (type === 'all') filtered = events;
+  else if (type === 'schools') filtered = events.filter(e => e.subtitle.toLowerCase().includes('schools') || e.subtitle.toLowerCase().includes('rising voices'));
+  else if (type === 'funnies') filtered = events.filter(e => e.subtitle.toLowerCase().includes('10 for 100') || e.name.toLowerCase().includes('funnies'));
+  else filtered = events.filter(e => e.type === type);
   renderEventCards('all-events-grid', filtered.length ? filtered : events);
 }
 
@@ -2105,7 +2307,7 @@ function selectPayment(btn) {
 function sendTip() {
   const amount = document.getElementById('tip-custom').value || selectedTipAmount;
   if (!amount || amount < 1) { showToast('Please enter an amount.', 'error'); return; }
-  showToast(`📱 Sending KES ${parseInt(amount).toLocaleString()} tip to Sauti Sol…`, 'success');
+  showToast(`📱 Sending KES ${parseInt(amount).toLocaleString()} tip to Rudy Francisco…`, 'success');
   setTimeout(() => showToast('✅ Tip sent! Artist notified. 🎤', 'success'), 1800);
 }
 
@@ -2134,16 +2336,16 @@ function showDashPanel(panel) {
       <div class="dash-two-col">
         <div class="dash-card">
           <div class="dash-card-title">Upcoming Tickets <span class="dash-card-tag">2 upcoming</span></div>
-          <div class="ticket-list-item"><div><div class="tli-event">Sauti Sol — Sawa Sawa</div><div class="tli-date">Sat 14 Jun · Kasarani, Nairobi</div></div><span class="tli-status status-upcoming">Upcoming</span></div>
-          <div class="ticket-list-item"><div><div class="tli-event">Nadia Mukami — Jua Kali</div><div class="tli-date">Fri 5 Jul · Virtual</div></div><span class="tli-status status-virtual">Virtual</span></div>
-          <div class="ticket-list-item" style="opacity:0.5;"><div><div class="tli-event">Burna Boy — Lagos</div><div class="tli-date">Sun 22 Jun · Lagos</div></div><span class="tli-status status-attended">Attended</span></div>
+          <div class="ticket-list-item"><div><div class="tli-event">Mufasa & Alysia Harris — Legacy & Lineage</div><div class="tli-date">Sat 21 Mar · Nairobi Creative Hub</div></div><span class="tli-status status-upcoming">Upcoming</span></div>
+          <div class="ticket-list-item"><div><div class="tli-event">Official Slam Prelim 1</div><div class="tli-date">Sun 5 Apr · Suave Kitchen</div></div><span class="tli-status status-upcoming">Upcoming</span></div>
+          <div class="ticket-list-item" style="opacity:0.5;"><div><div class="tli-event">Sumn for the Funnies #1</div><div class="tli-date">Sat 14 Feb · Suave Kitchen</div></div><span class="tli-status status-attended">Attended</span></div>
         </div>
         <div class="dash-card">
           <div class="dash-card-title">Recent Activity</div>
-          <div class="activity-item"><div class="activity-icon ai-ticket">🎫</div><div><div class="activity-text">Bought 1 ticket — Sauti Sol</div><div class="activity-sub">Front Row Presale · KES 5,000</div></div><div class="activity-time">2d ago</div></div>
-          <div class="activity-item"><div class="activity-icon ai-tip">💰</div><div><div class="activity-text">Tipped Nadia Mukami</div><div class="activity-sub">KES 1,000 via M-Pesa</div></div><div class="activity-time">5d ago</div></div>
+          <div class="activity-item"><div class="activity-icon ai-ticket">🎫</div><div><div class="activity-text">Bought 1 ticket — Mufasa & Alysia Harris</div><div class="activity-sub">VIP Front Row · KES 4,000</div></div><div class="activity-time">2d ago</div></div>
+          <div class="activity-item"><div class="activity-icon ai-tip">💰</div><div><div class="activity-text">Tipped Rudy Francisco</div><div class="activity-sub">KES 1,000 via M-Pesa</div></div><div class="activity-time">5d ago</div></div>
           <div class="activity-item"><div class="activity-icon ai-sale">📦</div><div><div class="activity-text">Purchased "Afrodisiac"</div><div class="activity-sub">Album · KES 500</div></div><div class="activity-time">1wk ago</div></div>
-          <div class="activity-item"><div class="activity-icon ai-ticket">🎫</div><div><div class="activity-text">Attended Burna Boy Lagos</div><div class="activity-sub">Floor ticket · Checked in</div></div><div class="activity-time">2wk ago</div></div>
+          <div class="activity-item"><div class="activity-icon ai-ticket">🎫</div><div><div class="activity-text">Attended Sumn for the Funnies #1</div><div class="activity-sub">General Entry · Checked in</div></div><div class="activity-time">2wk ago</div></div>
         </div>
       </div>
     `,
@@ -2157,9 +2359,9 @@ function showDashPanel(panel) {
           <table>
             <thead><tr><th>Event</th><th>Date</th><th>Tier</th><th>Price</th><th>Status</th><th>QR</th></tr></thead>
             <tbody>
-              <tr><td>Sauti Sol — Sawa Sawa</td><td>14 Jun 2025</td><td>Front Row</td><td>KES 5,000</td><td><span class="tli-status status-upcoming">Upcoming</span></td><td><button class="btn btn-ghost" style="font-size:9px;padding:4px 10px;" onclick="openTicketModal('Sauti Sol', 'Kasarani', '14 Jun', 1)">View QR</button></td></tr>
-              <tr><td>Nadia Mukami — Jua Kali</td><td>5 Jul 2025</td><td>Premium + Q&A</td><td>KES 1,500</td><td><span class="tli-status status-virtual">Virtual</span></td><td><button class="btn btn-ghost" style="font-size:9px;padding:4px 10px;">View QR</button></td></tr>
-              <tr style="opacity:0.6;"><td>Burna Boy — Lagos</td><td>22 Jun 2025</td><td>Floor</td><td>KES 4,500</td><td><span class="tli-status status-attended">Attended</span></td><td>—</td></tr>
+              <tr><td>Mufasa & Alysia Harris — Legacy & Lineage</td><td>21 Mar 2026</td><td>VIP Front Row</td><td>KES 4,000</td><td><span class="tli-status status-upcoming">Upcoming</span></td><td><button class="btn btn-ghost" style="font-size:9px;padding:4px 10px;" onclick="openTicketModal('Mufasa & Alysia Harris', 'Nairobi Creative Hub', '21 Mar 2026', 3)">View QR</button></td></tr>
+              <tr><td>Official Slam Prelim 1</td><td>5 Apr 2026</td><td>General</td><td>KES 800</td><td><span class="tli-status status-upcoming">Upcoming</span></td><td><button class="btn btn-ghost" style="font-size:9px;padding:4px 10px;">View QR</button></td></tr>
+              <tr style="opacity:0.6;"><td>Sumn for the Funnies #1</td><td>14 Feb 2026</td><td>Front Row</td><td>KES 1,000</td><td><span class="tli-status status-attended">Attended</span></td><td>—</td></tr>
             </tbody>
           </table>
         </div>
@@ -2196,9 +2398,9 @@ function showAdminPanel(panel) {
             <table>
               <thead><tr><th>Event</th><th>Sold</th><th>Revenue</th></tr></thead>
               <tbody>
-                <tr><td>Sauti Sol — Sawa Sawa</td><td>4,200</td><td>KES 1.4M</td></tr>
-                <tr><td>Burna Boy — Lagos</td><td>3,800</td><td>KES 1.1M</td></tr>
-                <tr><td>Makossa Night</td><td>1,200</td><td>KES 280K</td></tr>
+                <tr><td>Rudy Francisco & Gufy — Showcase 3</td><td>4,200</td><td>KES 1.4M</td></tr>
+                <tr><td>Abu Sense & Saul Williams — Showcase 4</td><td>3,800</td><td>KES 1.1M</td></tr>
+                <tr><td>Grand Slam Championship 2027</td><td>1,200</td><td>KES 580K</td></tr>
               </tbody>
             </table>
           </div>
@@ -2297,17 +2499,75 @@ function showToast(msg, type = '') {
 /* ═══ CLOSE MODALS ON OVERLAY CLICK ═══ */
 document.querySelectorAll('.modal-overlay').forEach(overlay => {
   overlay.addEventListener('click', function(e) {
-    if (e.target === this) this.classList.remove('open');
-  });
+    if (e.target === this) {
+    const id = this.id.replace('-modal', '');
+    closeModal(id + '-modal');
+  }
+});
+
+/* ═══ MOBILE NAV TOGGLE ═══ */
+function toggleMobileNav() {
+  document.body.classList.toggle('mobile-nav-open');
+  const btn = document.getElementById('mobile-nav-toggle');
+  btn.textContent = document.body.classList.contains('mobile-nav-open') ? '✕' : '☰';
+}
+
+// Close mobile nav when a link is clicked
+document.addEventListener('click', function(e) {
+  if (e.target.closest('.nav-links a')) {
+    document.body.classList.remove('mobile-nav-open');
+    document.getElementById('mobile-nav-toggle').textContent = '☰';
+  }
 });
 
 /* ═══ INIT ═══ */
-document.addEventListener('DOMContentLoaded', () => {
-  renderHomeEvents();
-});
-
-// Initial render
 renderHomeEvents();
+window.addEventListener('DOMContentLoaded', () => {
+  document.querySelectorAll('.modal-overlay').forEach(overlay => {
+    overlay.addEventListener('click', function(e) {
+      if (e.target === this) {
+        const id = this.id.replace('-modal', '');
+        closeModal(id + '-modal');
+      }
+    });
+  });
+});
 </script>
+
+<!-- MOBILE BOTTOM NAV -->
+<nav class="mobile-bottom-nav">
+  <div class="mobile-bottom-nav-item active" id="mbn-home" onclick="showView('home');setMBN('home')">
+    <span>🏠</span><span>Home</span>
+  </div>
+  <div class="mobile-bottom-nav-item" id="mbn-events" onclick="showView('events');setMBN('events')">
+    <span>🎟️</span><span>Events</span>
+  </div>
+  <div class="mobile-bottom-nav-item" id="mbn-tip" onclick="showView('tip');setMBN('tip')">
+    <span>🎤</span><span>Tip</span>
+  </div>
+  <div class="mobile-bottom-nav-item" id="mbn-store" onclick="showView('store');setMBN('store')">
+    <span>🛍️</span><span>Store</span>
+  </div>
+  <div class="mobile-bottom-nav-item" id="mbn-dashboard" onclick="showView('dashboard');setMBN('dashboard')">
+    <span>👤</span><span>My Tickets</span>
+  </div>
+</nav>
+
+<script>
+function setMBN(name) {
+  document.querySelectorAll('.mobile-bottom-nav-item').forEach(i => i.classList.remove('active'));
+  const el = document.getElementById('mbn-' + name);
+  if (el) el.classList.add('active');
+}
+
+// Sync mobile bottom nav with showView
+const _origShowView = showView;
+window.showView = function(name) {
+  _origShowView(name);
+  setMBN(name);
+};
+</script>
+
+
 </body>
 </html>
